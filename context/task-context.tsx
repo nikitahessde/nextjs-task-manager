@@ -7,11 +7,13 @@ const TaskContext = createContext<{
     addTask: (task: Task) => void;
     removeTask: (taskId: string) => void;
     changeStatus: (taskId: string, status: string) => void;
+    updateTask: (taskId: string, updates: Partial<Task>) => void;
 }>({
     tasks: [],
     addTask: () => {},
     removeTask: () => {},
-    changeStatus: () => {}
+    changeStatus: () => {},
+    updateTask: () => {}
 });
 
 interface Task {
@@ -37,8 +39,12 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setTasks(tasks.map(task => task.id === taskId ? { ...task, status: status } : task));
     };
 
+    const updateTask = (taskId: string, updates: Partial<Task>) => {
+        setTasks(tasks.map(task => task.id === taskId ? { ...task, ...updates } : task));
+    };
+
     return (
-        <TaskContext.Provider value={{ tasks, addTask, removeTask, changeStatus }}>
+        <TaskContext.Provider value={{ tasks, addTask, removeTask, changeStatus, updateTask }}>
             {children}
         </TaskContext.Provider>
     );
