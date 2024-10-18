@@ -16,28 +16,24 @@ interface Task {
 export const TaskDetails = () => {
   const { tasks, updateTask } = useTasks();
   const [editingTaskId, setEditingTaskId] = useState('');
-  const [editedTaskName, setEditedTaskName] = useState('');
-  const [editedTaskDescription, setEditedTaskDescription] = useState('');
-  const [editedTaskStatus, setEditedTaskStatus] = useState('');
+  const [editedTask, setEditedTask] = useState({ name: '', description: '', status: '' });
   const [nameError, setNameError] = useState('');
 
   const handleEdit = (task: Task) => {
     setEditingTaskId(task.id);
-    setEditedTaskName(task.name);
-    setEditedTaskDescription(task.description);
-    setEditedTaskStatus(task.status);
+    setEditedTask({ name: task.name, description: task.description, status: task.status });
     setNameError('');
   };
 
   const handleSave = (task: Task) => {
-    if (editedTaskName.trim() === '') {
+    if (editedTask.name.trim() === '') {
       setNameError('Task name cannot be empty');
       return;
     }
     updateTask(task.id, {
-        name: editedTaskName,
-        description: editedTaskDescription,
-        status: editedTaskStatus
+        name: editedTask.name,
+        description: editedTask.description,
+        status: editedTask.status
     })
     setEditingTaskId('');
     setNameError('');
@@ -65,8 +61,8 @@ export const TaskDetails = () => {
                                         <div>
                                             <input 
                                                 type="text" 
-                                                value={editedTaskName} 
-                                                onChange={(e) => setEditedTaskName(e.target.value)} 
+                                                value={editedTask.name} 
+                                                onChange={(e) => setEditedTask({ ...editedTask, name: e.target.value })} 
                                                 className="border p-2 rounded"
                                             />
                                             {nameError && <div className="text-red-500 text-xs">{nameError}</div>}
@@ -76,8 +72,8 @@ export const TaskDetails = () => {
                                 <td className="py-3 px-6 text-left">
                                     {editingTaskId === task.id ? (
                                         <textarea 
-                                            value={editedTaskDescription} 
-                                            onChange={(e) => setEditedTaskDescription(e.target.value)} 
+                                            value={editedTask.description} 
+                                            onChange={(e) => setEditedTask({ ...editedTask, description: e.target.value })} 
                                             className="border p-2 rounded w-full"
                                         />
                                     ) : task.description}
@@ -85,8 +81,8 @@ export const TaskDetails = () => {
                                 <td className="py-3 px-6 text-left">
                                     {editingTaskId === task.id ? (
                                         <select 
-                                            value={editedTaskStatus} 
-                                            onChange={(e) => setEditedTaskStatus(e.target.value)} 
+                                            value={editedTask.status} 
+                                            onChange={(e) => setEditedTask({ ...editedTask, status: e.target.value })} 
                                             className="border p-2 rounded"
                                         >
                                             <option value="todo">To do</option>
