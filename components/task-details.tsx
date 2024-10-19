@@ -4,9 +4,11 @@ import { useTasks } from "@/context/task-context";
 import { useState } from 'react';
 import ModeEdit from "@mui/icons-material/ModeEdit";
 import Check from "@mui/icons-material/Check";
+import { ObjectId } from "mongodb";
 
 interface Task {
-    id: string;
+    _id: ObjectId
+    uuid: string;
     name: string;
     description: string;
     status: string;
@@ -15,12 +17,12 @@ interface Task {
 
 export const TaskDetails = () => {
   const { tasks, updateTask } = useTasks();
-  const [editingTaskId, setEditingTaskId] = useState('');
+  const [editingTaskId, setEditingTaskId] = useState<ObjectId>();
   const [editedTask, setEditedTask] = useState({ name: '', description: '', status: '' });
   const [nameError, setNameError] = useState('');
 
   const handleEdit = (task: Task) => {
-    setEditingTaskId(task.id);
+    setEditingTaskId(task._id);
     setEditedTask({ name: task.name, description: task.description, status: task.status });
     setNameError('');
   };
@@ -30,12 +32,12 @@ export const TaskDetails = () => {
       setNameError('Task name cannot be empty');
       return;
     }
-    updateTask(task.id, {
+    updateTask(task._id, {
         name: editedTask.name,
         description: editedTask.description,
         status: editedTask.status
     })
-    setEditingTaskId('');
+    setEditingTaskId(undefined);
     setNameError('');
   };
 
@@ -55,9 +57,9 @@ export const TaskDetails = () => {
                 <tbody className="text-gray-600 text-sm font-light">
                     {tasks.length ? (
                         tasks.map((task) => (
-                            <tr key={task.id} className="border-b border-gray-200 hover:bg-gray-100 w-full">
+                            <tr key={task.uuid} className="border-b border-gray-200 hover:bg-gray-100 w-full">
                                 <td className="py-3 px-6 text-left">
-                                    {editingTaskId === task.id ? (
+                                    {editingTaskId === task._id ? (
                                         <div>
                                             <input 
                                                 type="text" 
@@ -70,7 +72,7 @@ export const TaskDetails = () => {
                                     ) : task.name}
                                 </td>
                                 <td className="py-3 px-6 text-left">
-                                    {editingTaskId === task.id ? (
+                                    {editingTaskId === task._id ? (
                                         <textarea 
                                             value={editedTask.description} 
                                             onChange={(e) => setEditedTask({ ...editedTask, description: e.target.value })} 
@@ -79,7 +81,7 @@ export const TaskDetails = () => {
                                     ) : task.description}
                                 </td>
                                 <td className="py-3 px-6 text-left">
-                                    {editingTaskId === task.id ? (
+                                    {editingTaskId === task._id ? (
                                         <select 
                                             value={editedTask.status} 
                                             onChange={(e) => setEditedTask({ ...editedTask, status: e.target.value })} 
@@ -93,14 +95,14 @@ export const TaskDetails = () => {
                                     task.status === 'inProgress' ? 'In Progress' : 
                                     'Done'}
                                 </td>
-                                <td className="py-3 px-6 text-left">{task.createdAt.toDateString()}</td>
+                                <td className="py-3 px-6 text-left">{new Date(task.createdAt).toDateString()}</td>
                                 <td className="py-3 px-6 text-left">
-                                    {editingTaskId === task.id ? (
-                                        <Check onClick={() => handleSave(task)} className="cursor-pointer">
+                                    {editingTaskId === task._id ? (
+                                        <Check onClick={() => handleSave(task as Task)} className="cursor-pointer">
                                             Save
                                         </Check>
                                     ) : (
-                                        <ModeEdit onClick={() => handleEdit(task)} className="cursor-pointer">
+                                        <ModeEdit onClick={() => task._id && handleEdit(task as Task)} className="cursor-pointer">
                                             Edit
                                         </ModeEdit>
                                     )}

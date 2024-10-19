@@ -3,9 +3,11 @@
 import { DeleteOutline } from "@mui/icons-material";
 import { useTasks } from "@/context/task-context";
 import { Tooltip } from '@mui/material';
+import { ObjectId } from "mongodb";
 
 interface Task {
-    id: string;
+    _id?: ObjectId;
+    uuid: string;
     name: string;
     description: string;
     status: string;
@@ -19,7 +21,7 @@ export const TaskList = () => {
             <div className="flex flex-col gap-4">
                 {tasks.length ? (
                     tasks.map((task: Task) => (
-                        <div key={task.id} className="flex justify-between items-center border py-2 px-4 rounded-lg w-full">
+                        <div key={task.uuid} className="flex justify-between items-center border py-2 px-4 rounded-lg w-full">
                             <div className="flex items-center flex-grow w-2/3">
                                 <div className="flex-grow max-w-full">
                                     <p className="font-semibold text-base break-all">{task.name}</p>
@@ -34,13 +36,13 @@ export const TaskList = () => {
                                 <select 
                                 className="border rounded-md px-2 py-1 text-sm" 
                                 value={task.status} 
-                                onChange={(e) => changeStatus(task.id, e.target.value)}
+                                onChange={(e) => task._id && changeStatus(task._id, e.target.value)}
                                 >
                                     <option value="todo">To do</option>
                                     <option value="inProgress">In progress</option>
                                     <option value="done">Done</option>
                                 </select>
-                                <DeleteOutline className="cursor-pointer" onClick={() => removeTask(task.id)}/>
+                                <DeleteOutline className="cursor-pointer" onClick={() => task._id && removeTask(task._id)}/>
                             </div>
                         </div>
                     ))
