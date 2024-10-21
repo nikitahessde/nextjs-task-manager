@@ -3,20 +3,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { ObjectId } from 'mongodb';
 
-const TaskContext = createContext<{
-    tasks: Task[];
-    addTask: (task: Task) => void;
-    removeTask: (id: ObjectId) => void;
-    changeStatus: (id: ObjectId, status: string) => void;
-    updateTask: (id: ObjectId, updates: Partial<Task>) => void;
-}>({
-    tasks: [],
-    addTask: () => {},
-    removeTask: () => {},
-    changeStatus: () => {},
-    updateTask: () => {}
-});
-
 interface Task {
     _id?: ObjectId;
     uuid: string;
@@ -26,17 +12,36 @@ interface Task {
     createdAt: Date;
 }
 
+const TaskContext = createContext<{
+    tasks: Task[];
+    addTask: (task: Task) => void;
+    removeTask: (uuid: string) => void;
+    changeStatus: (uuid: string, status: string) => void;
+    updateTask: (uuid: string, updates: Partial<Task>) => void;
+}>({
+    tasks: [],
+    addTask: () => {},
+    removeTask: () => {},
+    changeStatus: () => {},
+    updateTask: () => {}
+});
+
 export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [tasks, setTasks] = useState<Task[]>([]);
 
     const fetchTasks = async () => {
-        const response = await fetch('http://localhost:4000/tasks');
+        const response = await fetch('/api/tasks');
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Error fetching tasks:', errorText);
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
         setTasks(data);
     };
 
     const addTask = async (task: Omit<Task, '_id'>) => {
-        const response = await fetch('http://localhost:4000/tasks', {
+        const response = await fetch('/api/tasks', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -47,15 +52,15 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setTasks((prevTasks) => [...prevTasks, newTask]);
     };
 
-    const removeTask = async (_id: ObjectId) => {
-        await fetch(`http://localhost:4000/tasks/${_id}`, {
+    const removeTask = async (uuid: string) => {
+        await fetch(`/api/tasks/${uuid}`, {
             method: 'DELETE',
         });
-        setTasks(tasks.filter(task => task._id !== _id));
+        setTasks(tasks.filter(task => task.uuid !== uuid));
     };
 
-    const changeStatus = async (_id: ObjectId, status: string) => {
-        const response = await fetch(`http://localhost:4000/tasks/${_id}`, {
+    const changeStatus = async (uuid: string, status: string) => {
+        const response = await fetch(`/api/tasks/${uuid}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -63,11 +68,11 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
             body: JSON.stringify({ status }),
         });
         const updatedTask = await response.json();
-        setTasks(tasks.map(task => task._id === _id ? updatedTask : task));
+        setTasks(tasks.map(task => task.uuid === uuid ? updatedTask : task));
     };
 
-    const updateTask = async (_id: ObjectId, updates: Partial<Task>) => {
-        const response = await fetch(`http://localhost:4000/tasks/${_id}`, {
+    const updateTask = async (uuid: string, updates: Partial<Task>) => {
+        const response = await fetch(`/api/tasks/${uuid}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -75,7 +80,7 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
             body: JSON.stringify(updates),
         });
         const updatedTask = await response.json();
-        setTasks(tasks.map(task => task._id === _id ? updatedTask : task));
+        setTasks(tasks.map(task => task.uuid === uuid ? updatedTask : task));
     };
 
     useEffect(() => {

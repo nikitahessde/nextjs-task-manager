@@ -7,7 +7,6 @@ import Check from "@mui/icons-material/Check";
 import { ObjectId } from "mongodb";
 
 interface Task {
-    _id: ObjectId
     uuid: string;
     name: string;
     description: string;
@@ -17,12 +16,12 @@ interface Task {
 
 export const TaskDetails = () => {
   const { tasks, updateTask } = useTasks();
-  const [editingTaskId, setEditingTaskId] = useState<ObjectId>();
+  const [editingTaskId, setEditingTaskId] = useState<string>();
   const [editedTask, setEditedTask] = useState({ name: '', description: '', status: '' });
   const [nameError, setNameError] = useState('');
 
   const handleEdit = (task: Task) => {
-    setEditingTaskId(task._id);
+    setEditingTaskId(task.uuid);
     setEditedTask({ name: task.name, description: task.description, status: task.status });
     setNameError('');
   };
@@ -32,7 +31,7 @@ export const TaskDetails = () => {
       setNameError('Task name cannot be empty');
       return;
     }
-    updateTask(task._id, {
+    updateTask(task.uuid, {
         name: editedTask.name,
         description: editedTask.description,
         status: editedTask.status
@@ -59,7 +58,7 @@ export const TaskDetails = () => {
                         tasks.map((task) => (
                             <tr key={task.uuid} className="border-b border-gray-200 hover:bg-gray-100 w-full">
                                 <td className="py-3 px-6 text-left">
-                                    {editingTaskId === task._id ? (
+                                    {editingTaskId === task.uuid ? (
                                         <div>
                                             <input 
                                                 type="text" 
@@ -72,7 +71,7 @@ export const TaskDetails = () => {
                                     ) : task.name}
                                 </td>
                                 <td className="py-3 px-6 text-left">
-                                    {editingTaskId === task._id ? (
+                                    {editingTaskId === task.uuid ? (
                                         <textarea 
                                             value={editedTask.description} 
                                             onChange={(e) => setEditedTask({ ...editedTask, description: e.target.value })} 
@@ -81,7 +80,7 @@ export const TaskDetails = () => {
                                     ) : task.description}
                                 </td>
                                 <td className="py-3 px-6 text-left">
-                                    {editingTaskId === task._id ? (
+                                    {editingTaskId === task.uuid ? (
                                         <select 
                                             value={editedTask.status} 
                                             onChange={(e) => setEditedTask({ ...editedTask, status: e.target.value })} 
@@ -97,12 +96,12 @@ export const TaskDetails = () => {
                                 </td>
                                 <td className="py-3 px-6 text-left">{new Date(task.createdAt).toDateString()}</td>
                                 <td className="py-3 px-6 text-left">
-                                    {editingTaskId === task._id ? (
-                                        <Check onClick={() => handleSave(task as Task)} className="cursor-pointer">
+                                    {editingTaskId === task.uuid ? (
+                                        <Check onClick={() => handleSave(task)} className="cursor-pointer">
                                             Save
                                         </Check>
                                     ) : (
-                                        <ModeEdit onClick={() => task._id && handleEdit(task as Task)} className="cursor-pointer">
+                                        <ModeEdit onClick={() => task.uuid && handleEdit(task)} className="cursor-pointer">
                                             Edit
                                         </ModeEdit>
                                     )}

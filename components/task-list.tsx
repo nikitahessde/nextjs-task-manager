@@ -6,7 +6,6 @@ import { Tooltip } from '@mui/material';
 import { ObjectId } from "mongodb";
 
 interface Task {
-    _id?: ObjectId;
     uuid: string;
     name: string;
     description: string;
@@ -36,13 +35,13 @@ export const TaskList = () => {
                                 <select 
                                 className="border rounded-md px-2 py-1 text-sm" 
                                 value={task.status} 
-                                onChange={(e) => task._id && changeStatus(task._id, e.target.value)}
+                                onChange={(e) => task.uuid && changeStatus(task.uuid, e.target.value)}
                                 >
                                     <option value="todo">To do</option>
                                     <option value="inProgress">In progress</option>
                                     <option value="done">Done</option>
                                 </select>
-                                <DeleteOutline className="cursor-pointer" onClick={() => task._id && removeTask(task._id)}/>
+                                <DeleteOutline className="cursor-pointer" onClick={() => task.uuid && removeTask(task.uuid)}/>
                             </div>
                         </div>
                     ))

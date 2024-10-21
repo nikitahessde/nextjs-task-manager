@@ -17,7 +17,15 @@ export const AddNewTask = () => {
   });
 
   const onSubmit = (data: { taskName: string; taskDescription: string }) => {
-    addTask({ uuid: crypto.randomUUID(), name: data.taskName, description: data.taskDescription, status: 'todo', createdAt: new Date() });
+    const newTask = {
+        uuid: crypto.randomUUID(),
+        name: data.taskName,
+        description: data.taskDescription,
+        status: 'todo',
+        createdAt: new Date()
+      };
+    console.log('Submitting task:', newTask);
+    addTask(newTask);
     reset();
   };
 
