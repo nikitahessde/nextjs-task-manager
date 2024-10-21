@@ -24,7 +24,6 @@ export const AddNewTask = () => {
         status: 'todo',
         createdAt: new Date()
       };
-    console.log('Submitting task:', newTask);
     addTask(newTask);
     reset();
   };

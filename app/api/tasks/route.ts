@@ -8,7 +8,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
     const task = new Task(body);
     try {
         const savedTask = await task.save();
-        console.log('Task saved:', savedTask);
         return NextResponse.json(savedTask);
     } catch (error: any) {
         console.error('Error saving task:', error);
