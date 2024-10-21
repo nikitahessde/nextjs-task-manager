@@ -1,10 +1,8 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState } from 'react';
-import { ObjectId } from 'mongodb';
 
 interface Task {
-    _id?: ObjectId;
     uuid: string;
     name: string;
     description: string;
