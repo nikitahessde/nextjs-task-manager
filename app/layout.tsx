@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Menu from "../components/menu";
 import { TaskProvider } from "@/context/task-context";
+import { Provider } from "./provider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,14 +17,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <TaskProvider>
-          <div className="flex justify-center py-5 bg-background h-screen overflow-y-auto">
-            <div className="flex flex-col w-1/2 gap-4">
-              <Menu />
-              {children}
+        <Provider>
+          <TaskProvider>
+            <div className="flex justify-center py-5 bg-background h-screen overflow-y-auto">
+              <div className="flex flex-col w-1/2 gap-4">
+                <Menu />
+                {children}
+              </div>
             </div>
-          </div>
-        </TaskProvider>
+          </TaskProvider>
+        </Provider>
       </body>
     </html>
   );

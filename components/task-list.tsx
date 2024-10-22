@@ -9,6 +9,7 @@ interface Task {
     name: string;
     description: string;
     status: string;
+    assignedTo: string;
 }
 
 export const TaskList = () => {

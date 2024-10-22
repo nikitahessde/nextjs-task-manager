@@ -12,8 +12,8 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
             return NextResponse.json({ message: 'Task not found' }, { status: 404 });
         }
         return NextResponse.json(updatedTask);
-    } catch (error: any) {
-        return NextResponse.json({ message: error.message }, { status: 400 });
+    } catch (error) {
+        return NextResponse.json({ message: error}, { status: 400 });
     }
 }
 
@@ -22,7 +22,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
     try {
         await Task.findOneAndDelete({ uuid: params.id });
         return NextResponse.json({ message: 'Task deleted successfully' });
-    } catch (error: any) {
-        return NextResponse.json({ message: error.message }, { status: 400 });
+    } catch (error) {
+        return NextResponse.json({ message: error}, { status: 400 });
     }
 }

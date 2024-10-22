@@ -6,6 +6,7 @@ const taskSchema = new mongoose.Schema({
     description: { type: String, required: true },
     status: { type: String, default: 'todo' },
     createdAt: { type: Date, default: Date.now },
+    assignedTo: { type: String, required: false }
 }, { collection: 'task' });
 
 const Task = mongoose.models.task || mongoose.model('task', taskSchema);

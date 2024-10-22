@@ -8,6 +8,7 @@ interface Task {
     description: string;
     status: string;
     createdAt: Date;
+    assignedTo: string;
 }
 
 const TaskContext = createContext<{

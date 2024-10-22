@@ -1,7 +1,7 @@
 'use client'
 
 import { useTasks } from "@/context/task-context";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ModeEdit from "@mui/icons-material/ModeEdit";
 import Check from "@mui/icons-material/Check";
 
@@ -11,17 +11,33 @@ interface Task {
     description: string;
     status: string;
     createdAt: Date;
+    assignedTo: string;
+}
+
+interface User {
+    email: string;
+    name: string;
 }
 
 export const TaskDetails = () => {
   const { tasks, updateTask } = useTasks();
   const [editingTaskId, setEditingTaskId] = useState<string>();
-  const [editedTask, setEditedTask] = useState({ name: '', description: '', status: '' });
+  const [editedTask, setEditedTask] = useState({ name: '', description: '', status: '', assignedTo: '' }); // Added assignedTo to editedTask state
   const [nameError, setNameError] = useState('');
+  const [users, setUsers] = useState<User[]>([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+        const response = await fetch('/api/users');
+        const data = await response.json();
+        setUsers(data);
+    };
+    fetchUsers();
+}, []);
 
   const handleEdit = (task: Task) => {
     setEditingTaskId(task.uuid);
-    setEditedTask({ name: task.name, description: task.description, status: task.status });
+    setEditedTask({ name: task.name, description: task.description, status: task.status, assignedTo: task.assignedTo }); // Added assignedTo to setEditedTask
     setNameError('');
   };
 
@@ -33,7 +49,8 @@ export const TaskDetails = () => {
     updateTask(task.uuid, {
         name: editedTask.name,
         description: editedTask.description,
-        status: editedTask.status
+        status: editedTask.status,
+        assignedTo: editedTask.assignedTo // Added assignedTo to updateTask
     })
     setEditingTaskId(undefined);
     setNameError('');
@@ -49,6 +66,7 @@ export const TaskDetails = () => {
                         <th className="py-3 px-6 text-left">Description</th>
                         <th className="py-3 px-6 text-left">Status</th>
                         <th className="py-3 px-6 text-left">Created At</th>
+                        <th className="py-3 px-6 text-left">Assigned To</th>
                         <th className="py-3 px-6 text-left">Actions</th>
                     </tr>
                 </thead>
@@ -96,6 +114,19 @@ export const TaskDetails = () => {
                                 <td className="py-3 px-6 text-left">{new Date(task.createdAt).toDateString()}</td>
                                 <td className="py-3 px-6 text-left">
                                     {editingTaskId === task.uuid ? (
+                                        <select 
+                                            value={editedTask.assignedTo} 
+                                            onChange={(e) => setEditedTask({ ...editedTask, assignedTo: e.target.value })} 
+                                            className="border p-2 rounded"
+                                        >
+                                            {users.map((user) => (
+                                                <option key={user.email} value={user.email}>{user.name}</option>
+                                            ))}
+                                        </select>
+                                    ) : task.assignedTo}
+                                </td>
+                                <td className="py-3 px-6 text-left">
+                                    {editingTaskId === task.uuid ? (
                                         <Check onClick={() => handleSave(task)} className="cursor-pointer">
                                             Save
                                         </Check>
@@ -109,7 +140,7 @@ export const TaskDetails = () => {
                         ))
                     ) : (
                         <tr>
-                            <td colSpan={5} className="py-3 px-6 text-center text-base text-primary">No tasks</td>
+                            <td colSpan={6} className="py-3 px-6 text-center text-base text-primary">No tasks</td>
                         </tr>
                     )}
                 </tbody>

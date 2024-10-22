@@ -1,28 +1,46 @@
 'use client';
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { useTasks } from "@/context/task-context";
 import { useForm } from "react-hook-form";
 
+
+interface User {
+  email: string;
+  name: string;
+}
+
 export const AddNewTask = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [users, setUsers] = useState<User[]>([]);
   const { addTask } = useTasks();
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+        const response = await fetch('/api/users');
+        const data = await response.json();
+        setUsers(data);
+    };
+    fetchUsers();
+}, []);
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm({
     defaultValues: {
       taskName: '',
-      taskDescription: ''
+      taskDescription: '',
+      assignedTo: ''
     }
   });
 
-  const onSubmit = (data: { taskName: string; taskDescription: string }) => {
+  const onSubmit = (data: { taskName: string; taskDescription: string, assignedTo: string }) => {
     const newTask = {
         uuid: crypto.randomUUID(),
         name: data.taskName,
         description: data.taskDescription,
         status: 'todo',
-        createdAt: new Date()
+        createdAt: new Date(),
+        assignedTo: data.assignedTo
       };
     addTask(newTask);
     reset();
@@ -64,6 +82,20 @@ export const AddNewTask = () => {
             ></textarea>
           </div>
           {errors.taskDescription && <div className="text-red-500 text-xs">{errors.taskDescription.message}</div>}
+        </div>
+        <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-2">
+          <label htmlFor="assignTo" className="block text-sm font-medium text-primary">Assignee</label>
+          <select id="assignTo" {...register('assignedTo')} required className="border border-gray-400 p-2 rounded-lg w-full text-sm">
+                <option value="">Assign to...</option>
+                {users.map(user => (
+                    <option key={user.email} value={user.email}>
+                        {user.name} ({user.email})
+                    </option>
+                ))}
+          </select>
+          </div>
+          {errors.assignedTo && <div className="text-red-500 text-xs">{errors.assignedTo.message}</div>}
         </div>
         <button type="submit" className="inline-flex justify-center rounded-md border border-primary py-2 px-4 text-sm font-medium text-black">Add Task</button>
       </form>
