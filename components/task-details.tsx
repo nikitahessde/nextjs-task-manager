@@ -37,7 +37,7 @@ export const TaskDetails = () => {
 
   const handleEdit = (task: Task) => {
     setEditingTaskId(task.uuid);
-    setEditedTask({ name: task.name, description: task.description, status: task.status, assignedTo: task.assignedTo }); // Added assignedTo to setEditedTask
+    setEditedTask({ name: task.name, description: task.description, status: task.status, assignedTo: task.assignedTo });
     setNameError('');
   };
 
@@ -50,7 +50,7 @@ export const TaskDetails = () => {
         name: editedTask.name,
         description: editedTask.description,
         status: editedTask.status,
-        assignedTo: editedTask.assignedTo // Added assignedTo to updateTask
+        assignedTo: editedTask.assignedTo
     })
     setEditingTaskId(undefined);
     setNameError('');
