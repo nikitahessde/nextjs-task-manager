@@ -16,9 +16,9 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         await dbConnect();
         const user = await User.findOne({ email: credentials?.email }).select("+password");
-        if (!user) throw new Error("Wrong Email");
-        const passwordMatch = await bcrypt.compare(credentials!.password, user.password);
-        if (!passwordMatch) throw new Error("Wrong Password");
+        if (!user || !(await bcrypt.compare(credentials!.password, user.password))) {
+          throw new Error("Wrong email and/or password");
+        }
         return user;
       },
     }),

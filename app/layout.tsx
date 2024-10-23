@@ -19,8 +19,8 @@ export default function RootLayout({
       <body>
         <Provider>
           <TaskProvider>
-            <div className="flex justify-center py-5 bg-background h-screen overflow-y-auto">
-              <div className="flex flex-col w-1/2 gap-4">
+            <div className="flex h-screen justify-center overflow-y-auto bg-background py-5">
+              <div className="flex w-1/2 flex-col gap-4">
                 <Menu />
                 {children}
               </div>

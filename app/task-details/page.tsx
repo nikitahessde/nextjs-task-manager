@@ -1,9 +1,7 @@
 import TaskDetails from "@/components/task-details";
 
 const TaskDetailsPage = () => {
-  return (
-    <TaskDetails />
-  );
+  return <TaskDetails />;
 };
 
 export default TaskDetailsPage;

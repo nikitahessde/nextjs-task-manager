@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useEffect } from "react";
 import { SessionProvider, useSession } from "next-auth/react";
@@ -12,7 +12,7 @@ type Props = {
 const AuthRedirect = ({ children }: { children: React.ReactNode }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   useEffect(() => {
     if (status === "loading") return;
