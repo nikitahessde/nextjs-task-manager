@@ -18,7 +18,11 @@ const userSchema = new mongoose.Schema({
     name: {
       type: String,
       required: [true, "Name is required"]
-    }
+    },
+    role: {
+      type: String,
+      required: [true, "Role is required"]
+    }   
   },
   {
     timestamps: true,

@@ -14,6 +14,7 @@ export default function Register() {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
     const name = formData.get("name") as string;
+    const role = formData.get("role") as string;
 
     if (!email || !password || !name) {
       setError("All fields are required.");
@@ -23,7 +24,8 @@ export default function Register() {
     const r = await register({
         email,
         password,
-        name    
+        name,
+        role    
       });
       ref.current?.reset();
       if(r?.error){
@@ -57,6 +59,17 @@ export default function Register() {
                   className="border border-gray-400 p-2 rounded-lg w-full text-sm"
                   name="email"
                 />
+            </div>
+            <div className="flex flex-col gap-2">
+                <label className="w-full text-sm">Role</label>
+                <select
+                  className="border border-gray-400 p-2 rounded-lg w-full text-sm"
+                  name="role"
+                >
+                  <option value="admin">Admin</option>
+                  <option value="developer">Developer</option>
+                  <option value="guest">Guest</option>
+                </select>
             </div>
             <div className="flex flex-col gap-2">
                 <label className="w-full text-sm">Password</label>

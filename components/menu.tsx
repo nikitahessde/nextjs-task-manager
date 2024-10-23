@@ -26,6 +26,12 @@ export const Menu = () => {
         <Link href={'/task-details'} className='bg-primary px-3 py-2 rounded-lg'>
           <p className='text-secondary text-xs font-semibold'>Task Details</p>
         </Link>
+        <Link href={'/user-list'} className='bg-primary px-3 py-2 rounded-lg'>
+          <p className='text-secondary text-xs font-semibold'>User List</p>
+        </Link>
+        <Link href={'/user-details'} className='bg-primary px-3 py-2 rounded-lg'>
+          <p className='text-secondary text-xs font-semibold'>User Details</p>
+        </Link>
       </div>
       <Logout
           className="cursor-pointer"
