@@ -3,6 +3,7 @@ import "./globals.css";
 import Menu from "../components/menu";
 import { TaskProvider } from "@/context/task-context";
 import { Provider } from "./provider";
+import { UserProvider } from "@/context/user-context";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,14 +19,16 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Provider>
-          <TaskProvider>
-            <div className="flex h-screen justify-center overflow-y-auto bg-background py-5">
-              <div className="flex w-1/2 flex-col gap-4">
-                <Menu />
-                {children}
+          <UserProvider>
+            <TaskProvider>
+              <div className="flex h-screen justify-center overflow-y-auto bg-background py-5">
+                <div className="flex w-1/2 flex-col gap-4">
+                  <Menu />
+                  {children}
+                </div>
               </div>
-            </div>
-          </TaskProvider>
+            </TaskProvider>
+          </UserProvider>
         </Provider>
       </body>
     </html>

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { register as registerAction } from "@/actions/register";
@@ -16,15 +16,13 @@ export default function Register() {
     criteriaMode: "all",
   });
   const router = useRouter();
-  const [error, setErrorState] = useState<string | null>(null);
 
   const onSubmit = async (data: any) => {
-    const { email, password, name } = data;
+    const { email, password, name, role } = data;
 
-    const r = await registerAction({ email, password, name });
+    const r = await registerAction({ email, password, name, role });
     reset();
     if (r?.error) {
-      setErrorState(r.error);
       return;
     } else {
       return router.push("/login");
@@ -57,6 +55,18 @@ export default function Register() {
             {...register("email", { required: true })}
           />
           {errors.email && <span className="text-xs text-red-500">This field is required</span>}
+        </div>
+        <div className="flex flex-col gap-2">
+          <label className="w-full text-sm">Role</label>
+          <select
+            className="w-full rounded-lg border border-gray-400 p-2 text-sm"
+            {...register("role", { required: true })}
+          >
+            <option value="admin">Admin</option>
+            <option value="developer">Software Developer</option>
+            <option value="manager">Manager</option>
+          </select>
+          {errors.role && <span className="text-xs text-red-500">This field is required</span>}
         </div>
         <div className="flex flex-col gap-2">
           <label className="w-full text-sm">Password</label>
