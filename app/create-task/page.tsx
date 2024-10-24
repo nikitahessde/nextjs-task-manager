@@ -1,10 +1,7 @@
 import AddNewTask from "@/components/create-task";
 
 const AddNewTaskPage = () => {
-  return (
-    <AddNewTask />
-  );
+  return <AddNewTask />;
 };
 
 export default AddNewTaskPage;
-
