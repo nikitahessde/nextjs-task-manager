@@ -19,7 +19,7 @@ const AuthRedirect = ({ children }: { children: React.ReactNode }) => {
     if (session && (pathname === "/login" || pathname === "/signup")) {
       router.push("/");
     }
-    if (!session) {
+    if (!session && pathname !== "/login" && pathname !== "/signup") {
       router.push("/login");
     }
   }, [session, status, router]);
