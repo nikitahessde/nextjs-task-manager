@@ -6,10 +6,10 @@ interface User {
 }
 
 interface UserListProps {
-    users: User[];
-  }
+  users: User[];
+}
 
-  export const UserList = ({ users }: UserListProps) => {
+export const UserList = ({ users }: UserListProps) => {
   return (
     <div className="flex flex-col gap-4 overflow-y-auto rounded-lg border-2 border-primary bg-secondary p-4">
       <p className="text-xl font-semibold">User list</p>

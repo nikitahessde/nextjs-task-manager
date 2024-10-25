@@ -10,14 +10,14 @@ interface User {
 }
 
 interface UserListProps {
-    user: User;
-    editUser: (email: string, updates: Partial<{ name: string }>) => Promise<void>;
+  user: User;
+  editUser: (email: string, updates: Partial<{ name: string }>) => Promise<void>;
 }
 
 export const UserDetails = ({ user, editUser }: UserListProps) => {
   const [editingUserEmail, setEditingUserEmail] = useState<string | undefined>();
   const [nameError, setNameError] = useState("");
-  const [editedUser, setEditedUser] = useState<User>({...user});
+  const [editedUser, setEditedUser] = useState<User>({ ...user });
 
   const handleSave = async () => {
     if (editedUser && editedUser.name.trim() === "") {
@@ -60,7 +60,7 @@ export const UserDetails = ({ user, editUser }: UserListProps) => {
               type="email"
               value={user.email}
               disabled
-              className="rounded border p-2 bg-gray-200"
+              className="rounded border bg-gray-200 p-2"
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -69,16 +69,22 @@ export const UserDetails = ({ user, editUser }: UserListProps) => {
               type="text"
               value={user.role}
               disabled
-              className="rounded border p-2 bg-gray-200"
+              className="rounded border bg-gray-200 p-2"
             />
           </div>
-          <div className="flex gap-2 mt-4">
+          <div className="mt-4 flex gap-2">
             {editingUserEmail === user.email && (
               <div className="flex gap-2">
-                <button onClick={handleSave} className="cursor-pointer bg-primary py-2 px-4 text-white rounded-lg text-sm">
+                <button
+                  onClick={handleSave}
+                  className="cursor-pointer rounded-lg bg-primary px-4 py-2 text-sm text-white"
+                >
                   Save
                 </button>
-                <button onClick={handleCancel} className="cursor-pointer py-2 px-4 border border-black rounded-lg text-sm">
+                <button
+                  onClick={handleCancel}
+                  className="cursor-pointer rounded-lg border border-black px-4 py-2 text-sm"
+                >
                   Cancel
                 </button>
               </div>

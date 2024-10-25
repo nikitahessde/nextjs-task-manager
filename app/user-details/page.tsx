@@ -6,11 +6,13 @@ import { authOptions } from "@/lib/auth";
 
 const UserDetailsPage = async () => {
   await dbConnect();
-  const session = await getServerSession(authOptions)
-  const user = await User.findOne({email: session?.user.email}).select("name email role createdAt");
+  const session = await getServerSession(authOptions);
+  const user = await User.findOne({ email: session?.user.email }).select(
+    "name email role createdAt",
+  );
 
   const editUser = async (email: string, updates: Partial<{ name: string }>) => {
-    'use server'
+    "use server";
     await dbConnect();
     await User.updateOne({ email }, updates);
   };

@@ -4,7 +4,7 @@ import User from "@/models/User";
 
 const UserListPage = async () => {
   await dbConnect();
-  const users = await User.find().select("name email role createdAt")
+  const users = await User.find().select("name email role createdAt");
 
   return <UserList users={users} />;
 };
