@@ -4,16 +4,21 @@ import { useEffect, useState } from "react";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { useTasks } from "@/context/task-context";
 import { useForm } from "react-hook-form";
+import { useSession } from "next-auth/react";
 
 interface User {
   email: string;
   name: string;
+  role: string;
 }
 
 export const AddNewTask = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
+  const [currentUser, setCurrentUser] = useState<User>();
   const { addTask } = useTasks();
+  const { data: session, status } = useSession();
+  console.log(session);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -22,7 +27,7 @@ export const AddNewTask = () => {
       setUsers(data);
     };
     fetchUsers();
-  }, []);
+  }, [session]);
 
   const {
     register,
@@ -49,6 +54,14 @@ export const AddNewTask = () => {
     addTask(newTask);
     reset();
   };
+
+  if (session?.user.role !== "manager" && session?.user.role !== "admin") {
+    return (
+      <div className="flex justify-center text-sm text-red-500">
+        Only admin or manager can add tasks
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-4 rounded-lg border-2 border-primary bg-secondary p-4">

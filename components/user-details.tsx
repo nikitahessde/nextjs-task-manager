@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ModeEdit from "@mui/icons-material/ModeEdit";
 import Check from "@mui/icons-material/Check";
-import { useUsers } from "@/context/user-context";
+import { useSession } from "next-auth/react";
+import { Tooltip } from "@mui/material";
 
 interface User {
   name: string;
@@ -13,10 +14,33 @@ interface User {
 }
 
 export const UserDetails = () => {
-  const { users, updateUser } = useUsers();
   const [editingUserEmail, setEditingUserEmail] = useState<string>();
   const [editedUser, setEditedUser] = useState({ name: "", role: "" });
   const [nameError, setNameError] = useState("");
+  const [users, setUsers] = useState<User[]>([]);
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const response = await fetch("/api/users");
+      const data = await response.json();
+      setUsers(data);
+    };
+
+    fetchUsers();
+  }, []);
+
+  const updateUser = async (email: string, updates: Partial<User>) => {
+    const response = await fetch(`/api/users/${email}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updates),
+    });
+    const updatedUser = await response.json();
+    setUsers((prevUsers) => prevUsers.map((user) => (user.email === email ? updatedUser : user))); // Update users state
+  };
 
   const handleEdit = (user: User) => {
     setEditingUserEmail(user.email);
@@ -24,15 +48,16 @@ export const UserDetails = () => {
     setNameError("");
   };
 
-  const handleSave = (user: User) => {
+  const handleSave = async (user: User) => {
     if (editedUser.name.trim() === "") {
       setNameError("Task name cannot be empty");
       return;
     }
-    updateUser(user.email, {
+    await updateUser(user.email, {
       name: editedUser.name,
       role: editedUser.role,
     });
+
     setEditingUserEmail(undefined);
     setNameError("");
   };
@@ -70,34 +95,33 @@ export const UserDetails = () => {
                     )}
                   </td>
                   <td className="px-6 py-3 text-left">{user.email}</td>
-                  <td className="px-6 py-3 text-left">
-                    {editingUserEmail === user.email ? (
-                      <select
-                        value={editedUser.role}
-                        onChange={(e) => setEditedUser({ ...editedUser, role: e.target.value })}
-                        className="rounded border p-2"
-                      >
-                        <option value="admin">Admin</option>
-                        <option value="developer">Software Developer</option>
-                        <option value="manager">Manager</option>
-                      </select>
-                    ) : (
-                      user.role
-                    )}
-                  </td>
+                  <td className="px-6 py-3 text-left">{user.role}</td>
                   <td className="px-6 py-3 text-left">{new Date(user.createdAt).toDateString()}</td>
                   <td className="px-6 py-3 text-left">
                     {editingUserEmail === user.email ? (
-                      <Check onClick={() => handleSave(user)} className="cursor-pointer">
+                      <Check onClick={() => handleSave(user)} className="dis cursor-pointer">
                         Save
                       </Check>
+                    ) : session?.user.role !== "admin" ? (
+                      <Tooltip title="Only admin has access for editing users">
+                        <button disabled={true}>
+                          <ModeEdit
+                            onClick={() => user.email && handleEdit(user)}
+                            className="cursor-pointer"
+                          >
+                            Edit
+                          </ModeEdit>
+                        </button>
+                      </Tooltip>
                     ) : (
-                      <ModeEdit
-                        onClick={() => user.email && handleEdit(user)}
-                        className="cursor-pointer"
-                      >
-                        Edit
-                      </ModeEdit>
+                      <button>
+                        <ModeEdit
+                          onClick={() => user.email && handleEdit(user)}
+                          className="cursor-pointer"
+                        >
+                          Edit
+                        </ModeEdit>
+                      </button>
                     )}
                   </td>
                 </tr>

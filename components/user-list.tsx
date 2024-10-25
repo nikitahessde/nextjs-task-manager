@@ -1,6 +1,6 @@
 "use client";
 
-import { useUsers } from "@/context/user-context";
+import { useEffect, useState } from "react";
 
 interface User {
   name: string;
@@ -10,7 +10,18 @@ interface User {
 }
 
 export const UserList = () => {
-  const { users } = useUsers();
+  const [users, setUsers] = useState<User[]>([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const response = await fetch("/api/users");
+      const data = await response.json();
+      setUsers(data);
+    };
+
+    fetchUsers();
+  }, []);
+
   return (
     <div className="flex flex-col gap-4 overflow-y-auto rounded-lg border-2 border-primary bg-secondary p-4">
       <p className="text-xl font-semibold">User list</p>

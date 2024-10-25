@@ -1,7 +1,14 @@
 import mongoose from "mongoose";
 import { hash, compare } from "bcryptjs";
 
-const userSchema = new mongoose.Schema(
+interface IUser {
+  email: string;
+  password: string;
+  name: string;
+  role: string;
+}
+
+const userSchema = new mongoose.Schema<IUser>(
   {
     email: {
       type: String,
