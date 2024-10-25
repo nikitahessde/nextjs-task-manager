@@ -1,10 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import ModeEdit from "@mui/icons-material/ModeEdit";
-import Check from "@mui/icons-material/Check";
-import { useSession } from "next-auth/react";
-import { Tooltip } from "@mui/material";
 
 interface User {
   name: string;
@@ -14,121 +10,81 @@ interface User {
 }
 
 interface UserListProps {
-    users: User[];
-    editUser: (email: string, updates: Partial<{ name: string; role: string }>, session: any) => Promise<void>;
+    user: User;
+    editUser: (email: string, updates: Partial<{ name: string }>) => Promise<void>;
 }
 
-export const UserDetails = ({ users, editUser }: UserListProps) => {
-  const [editingUserEmail, setEditingUserEmail] = useState<string>();
-  const [editedUsers, setEditedUsers] = useState<User[]>(users);
+export const UserDetails = ({ user, editUser }: UserListProps) => {
+  const [editingUserEmail, setEditingUserEmail] = useState<string | undefined>();
   const [nameError, setNameError] = useState("");
-  const { data: session } = useSession();
+  const [editedUser, setEditedUser] = useState<User>({...user});
 
-  const handleEdit = (user: User) => {
-    setEditingUserEmail(user.email);
-    setNameError("");
-  };
-
-  const handleSave = async (user: User) => {
-    const updatedUser = editedUsers.find(u => u.email === user.email);
-    if (updatedUser && updatedUser.name.trim() === "") {
+  const handleSave = async () => {
+    if (editedUser && editedUser.name.trim() === "") {
       setNameError("Task name cannot be empty");
       return;
     }
 
-    await editUser(user.email, { name: updatedUser?.name, role: updatedUser?.role }, session);
-
-    setEditedUsers(prevUsers =>
-    prevUsers.map(u =>
-          u.email === user.email ? { ...u, name: updatedUser?.name || '', role: updatedUser?.role || '' } : u
-        )
-    );
+    await editUser(editedUser.email, { name: editedUser.name });
 
     setEditingUserEmail(undefined);
     setNameError("");
   };
 
-  const handleChange = (email: string, field: keyof User, value: string) => {
-    setEditedUsers(prevUsers =>
-      prevUsers.map(user =>
-        user.email === email ? { ...user, [field]: value } : user
-      )
-    );
+  const handleCancel = () => {
+    setEditingUserEmail(undefined);
+    setNameError("");
+    setEditedUser({ ...user });
   };
 
   return (
     <div className="flex flex-col gap-4 rounded-lg border-2 border-primary bg-secondary p-4">
       <div className="w-full overflow-x-auto rounded-lg">
-        <table className="w-full">
-          <thead>
-            <tr className="bg-gray-200 text-sm leading-normal text-gray-600">
-              <th className="px-6 py-3 text-left">Name</th>
-              <th className="px-6 py-3 text-left">Email</th>
-              <th className="px-6 py-3 text-left">Role</th>
-              <th className="px-6 py-3 text-left">Created At</th>
-              <th className="px-6 py-3 text-left">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="text-sm font-light text-gray-600">
-            {editedUsers.length ? (
-              editedUsers.map((user) => (
-                <tr key={user.email} className="w-full border-b border-gray-200 hover:bg-gray-100">
-                  <td className="px-6 py-3 text-left">
-                    {editingUserEmail === user.email ? (
-                      <div>
-                        <input
-                          type="text"
-                          value={user.name}
-                          onChange={(e) => handleChange(user.email, 'name', e.target.value)}
-                          className="rounded border p-2"
-                        />
-                        {nameError && <div className="text-xs text-red-500">{nameError}</div>}
-                      </div>
-                    ) : (
-                      user.name
-                    )}
-                  </td>
-                  <td className="px-6 py-3 text-left">{user.email}</td>
-                  <td className="px-6 py-3 text-left">{user.role}</td>
-                  <td className="px-6 py-3 text-left">{new Date(user.createdAt).toDateString()}</td>
-                  <td className="px-6 py-3 text-left">
-                    {editingUserEmail === user.email ? (
-                      <Check onClick={() => handleSave(user)} className="dis cursor-pointer">
-                        Save
-                      </Check>
-                    ) : session?.user.role !== "admin" ? (
-                      <Tooltip title="Only admin has access for editing users">
-                        <button disabled={true}>
-                          <ModeEdit
-                            onClick={() => user.email && handleEdit(user)}
-                            className="cursor-pointer"
-                          >
-                            Edit
-                          </ModeEdit>
-                        </button>
-                      </Tooltip>
-                    ) : (
-                      <button>
-                        <ModeEdit
-                          onClick={() => user.email && handleEdit(user)}
-                          className="cursor-pointer"
-                        >
-                          Edit
-                        </ModeEdit>
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={6} className="px-6 py-3 text-center text-base text-primary">
-                  No users
-                </td>
-              </tr>
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
+            <label className="text-sm">Name</label>
+            <input
+              type="text"
+              value={editedUser.name}
+              onChange={(e) => {
+                setEditedUser({ ...editedUser, name: e.target.value });
+                user.email && setEditingUserEmail(user.email);
+              }}
+              className="rounded border p-2"
+            />
+            {nameError && <div className="text-xs text-red-500">{nameError}</div>}
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="text-sm">Email</label>
+            <input
+              type="email"
+              value={user.email}
+              disabled
+              className="rounded border p-2 bg-gray-200"
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="text-sm">Role</label>
+            <input
+              type="text"
+              value={user.role}
+              disabled
+              className="rounded border p-2 bg-gray-200"
+            />
+          </div>
+          <div className="flex gap-2 mt-4">
+            {editingUserEmail === user.email && (
+              <div className="flex gap-2">
+                <button onClick={handleSave} className="cursor-pointer bg-primary py-2 px-4 text-white rounded-lg text-sm">
+                  Save
+                </button>
+                <button onClick={handleCancel} className="cursor-pointer py-2 px-4 border border-black rounded-lg text-sm">
+                  Cancel
+                </button>
+              </div>
             )}
-          </tbody>
-        </table>
+          </div>
+        </div>
       </div>
     </div>
   );

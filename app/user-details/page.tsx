@@ -1,22 +1,21 @@
 import UserDetails from "@/components/user-details";
 import dbConnect from "@/utils/mongodb";
 import User from "@/models/User";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 const UserDetailsPage = async () => {
   await dbConnect();
-  const users = await User.find().select("name email role createdAt");
+  const session = await getServerSession(authOptions)
+  const user = await User.findOne({email: session?.user.email}).select("name email role createdAt");
 
-  const editUser = async (email: string, updates: Partial<{ name: string; role: string }>, session: any) => {
+  const editUser = async (email: string, updates: Partial<{ name: string }>) => {
     'use server'
-    if (session?.user?.role !== "admin") {
-      console.error("Only admin can edit users");
-      return;
-    }
     await dbConnect();
     await User.updateOne({ email }, updates);
   };
 
-  return <UserDetails users={users} editUser={editUser} />;
+  return <UserDetails user={user} editUser={editUser} />;
 };
 
 export default UserDetailsPage;
