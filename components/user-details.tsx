@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ModeEdit from "@mui/icons-material/ModeEdit";
 import Check from "@mui/icons-material/Check";
 import { useSession } from "next-auth/react";
@@ -13,53 +13,47 @@ interface User {
   createdAt: Date;
 }
 
-export const UserDetails = () => {
+interface UserListProps {
+    users: User[];
+    editUser: (email: string, updates: Partial<{ name: string; role: string }>, session: any) => Promise<void>;
+}
+
+export const UserDetails = ({ users, editUser }: UserListProps) => {
   const [editingUserEmail, setEditingUserEmail] = useState<string>();
-  const [editedUser, setEditedUser] = useState({ name: "", role: "" });
+  const [editedUsers, setEditedUsers] = useState<User[]>(users);
   const [nameError, setNameError] = useState("");
-  const [users, setUsers] = useState<User[]>([]);
   const { data: session } = useSession();
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const response = await fetch("/api/users");
-      const data = await response.json();
-      setUsers(data);
-    };
-
-    fetchUsers();
-  }, []);
-
-  const updateUser = async (email: string, updates: Partial<User>) => {
-    const response = await fetch(`/api/users/${email}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updates),
-    });
-    const updatedUser = await response.json();
-    setUsers((prevUsers) => prevUsers.map((user) => (user.email === email ? updatedUser : user))); // Update users state
-  };
 
   const handleEdit = (user: User) => {
     setEditingUserEmail(user.email);
-    setEditedUser({ name: user.name, role: user.role });
     setNameError("");
   };
 
   const handleSave = async (user: User) => {
-    if (editedUser.name.trim() === "") {
+    const updatedUser = editedUsers.find(u => u.email === user.email);
+    if (updatedUser && updatedUser.name.trim() === "") {
       setNameError("Task name cannot be empty");
       return;
     }
-    await updateUser(user.email, {
-      name: editedUser.name,
-      role: editedUser.role,
-    });
+
+    await editUser(user.email, { name: updatedUser?.name, role: updatedUser?.role }, session);
+
+    setEditedUsers(prevUsers =>
+    prevUsers.map(u =>
+          u.email === user.email ? { ...u, name: updatedUser?.name || '', role: updatedUser?.role || '' } : u
+        )
+    );
 
     setEditingUserEmail(undefined);
     setNameError("");
+  };
+
+  const handleChange = (email: string, field: keyof User, value: string) => {
+    setEditedUsers(prevUsers =>
+      prevUsers.map(user =>
+        user.email === email ? { ...user, [field]: value } : user
+      )
+    );
   };
 
   return (
@@ -76,16 +70,16 @@ export const UserDetails = () => {
             </tr>
           </thead>
           <tbody className="text-sm font-light text-gray-600">
-            {users.length ? (
-              users.map((user) => (
+            {editedUsers.length ? (
+              editedUsers.map((user) => (
                 <tr key={user.email} className="w-full border-b border-gray-200 hover:bg-gray-100">
                   <td className="px-6 py-3 text-left">
                     {editingUserEmail === user.email ? (
                       <div>
                         <input
                           type="text"
-                          value={editedUser.name}
-                          onChange={(e) => setEditedUser({ ...editedUser, name: e.target.value })}
+                          value={user.name}
+                          onChange={(e) => handleChange(user.email, 'name', e.target.value)}
                           className="rounded border p-2"
                         />
                         {nameError && <div className="text-xs text-red-500">{nameError}</div>}

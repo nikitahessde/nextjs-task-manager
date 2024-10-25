@@ -31,13 +31,11 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user && "role" in user) {
         token.role = user.role;
-        console.log("token", token);
       }
       return token;
     },
     async session({ session, token }) {
       session.user.role = token.role as string;
-      console.log("session", session);
       return session;
     },
   },

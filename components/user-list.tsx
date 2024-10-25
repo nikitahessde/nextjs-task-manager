@@ -1,7 +1,3 @@
-"use client";
-
-import { useEffect, useState } from "react";
-
 interface User {
   name: string;
   email: string;
@@ -9,19 +5,11 @@ interface User {
   createdAt: Date;
 }
 
-export const UserList = () => {
-  const [users, setUsers] = useState<User[]>([]);
+interface UserListProps {
+    users: User[];
+  }
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const response = await fetch("/api/users");
-      const data = await response.json();
-      setUsers(data);
-    };
-
-    fetchUsers();
-  }, []);
-
+  export const UserList = ({ users }: UserListProps) => {
   return (
     <div className="flex flex-col gap-4 overflow-y-auto rounded-lg border-2 border-primary bg-secondary p-4">
       <p className="text-xl font-semibold">User list</p>
