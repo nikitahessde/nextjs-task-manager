@@ -5,11 +5,11 @@ import Link from "next/link";
 import { register as registerAction } from "@/actions/register";
 import { useForm } from "react-hook-form";
 
-type FormData = {
+type RegistrationFormData = {
   email: string;
   password: string;
   name: string;
-  role: string;
+  role: string[];
   confirmPassword: string;
 };
 
@@ -20,12 +20,12 @@ export default function Register() {
     formState: { errors },
     reset,
     getValues,
-  } = useForm<FormData>({
+  } = useForm<RegistrationFormData>({
     criteriaMode: "all",
   });
   const router = useRouter();
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: RegistrationFormData) => {
     const { email, password, name, role } = data;
 
     const r = await registerAction({ email, password, name, role });

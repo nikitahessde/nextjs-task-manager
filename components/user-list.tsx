@@ -1,7 +1,7 @@
 interface User {
   name: string;
   email: string;
-  role: string;
+  role: string[];
   createdAt: Date;
 }
 
@@ -26,7 +26,7 @@ export const UserList = ({ users }: UserListProps) => {
                   <p className="break-words text-sm text-gray-500">{user.email}</p>
                 </div>
               </div>
-              <p>{user.role}</p>
+              <p>{user.role[0]}</p>
             </div>
           ))
         ) : (

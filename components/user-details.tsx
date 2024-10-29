@@ -5,7 +5,7 @@ import { useState } from "react";
 interface User {
   name: string;
   email: string;
-  role: string;
+  role: string[];
   createdAt: Date;
 }
 
@@ -48,7 +48,7 @@ export const UserDetails = ({ user, editUser }: UserListProps) => {
               value={editedUser.name}
               onChange={(e) => {
                 setEditedUser({ ...editedUser, name: e.target.value });
-                user.email && setEditingUserEmail(user.email);
+                if (user.email) setEditingUserEmail(user.email);
               }}
               className="rounded border p-2"
             />
@@ -67,7 +67,7 @@ export const UserDetails = ({ user, editUser }: UserListProps) => {
             <label className="text-sm">Role</label>
             <input
               type="text"
-              value={user.role}
+              value={user.role[0]}
               disabled
               className="rounded border bg-gray-200 p-2"
             />

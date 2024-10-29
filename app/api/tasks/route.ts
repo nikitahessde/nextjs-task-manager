@@ -1,8 +1,14 @@
 import dbConnect from "../../../utils/mongodb";
 import Task from "../../../models/Task";
 import { NextRequest, NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
+  const session = await getServerSession(authOptions);
+  if (!session || !(session.user.role[0] === "admin")) {
+    return NextResponse.json({ message: "Permission denied" }, { status: 403 });
+  }
   await dbConnect();
   const body = await req.json();
   const task = new Task(body);

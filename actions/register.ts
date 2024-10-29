@@ -7,7 +7,7 @@ export const register = async (values: {
   email: string;
   password: string;
   name: string;
-  role: string;
+  role: string[];
 }) => {
   const { email, password, name, role } = values;
   try {
@@ -22,7 +22,7 @@ export const register = async (values: {
       name,
       email,
       password,
-      role,
+      role: [role],
     });
     await user.save();
   } catch (e) {

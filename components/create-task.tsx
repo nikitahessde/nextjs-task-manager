@@ -5,20 +5,20 @@ import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { useTasks } from "@/context/task-context";
 import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
+import Snackbar from "@mui/material/Snackbar";
 
 interface User {
   email: string;
   name: string;
-  role: string;
+  role: string[];
 }
 
 export const AddNewTask = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
-  const [currentUser, setCurrentUser] = useState<User>();
   const { addTask } = useTasks();
-  const { data: session, status } = useSession();
-  console.log(session);
+  const { data: session } = useSession();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -43,6 +43,10 @@ export const AddNewTask = () => {
   });
 
   const onSubmit = (data: { taskName: string; taskDescription: string; assignedTo: string }) => {
+    if (session?.user?.role[0] !== "admin") {
+      setSnackbarOpen(true);
+      return;
+    }
     const newTask = {
       uuid: crypto.randomUUID(),
       name: data.taskName,
@@ -54,14 +58,6 @@ export const AddNewTask = () => {
     addTask(newTask);
     reset();
   };
-
-  if (session?.user.role !== "manager" && session?.user.role !== "admin") {
-    return (
-      <div className="flex justify-center text-sm text-red-500">
-        Only admin or manager can add tasks
-      </div>
-    );
-  }
 
   return (
     <div className="flex flex-col gap-4 rounded-lg border-2 border-primary bg-secondary p-4">
@@ -123,7 +119,6 @@ export const AddNewTask = () => {
             <select
               id="assignTo"
               {...register("assignedTo")}
-              required
               className="w-full rounded-lg border border-gray-400 p-2 text-sm"
             >
               <option value="">Assign to...</option>
@@ -145,6 +140,12 @@ export const AddNewTask = () => {
           Add Task
         </button>
       </form>
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={() => setSnackbarOpen(false)}
+        message={"You do not have permission to add tasks"}
+      />
     </div>
   );
 };

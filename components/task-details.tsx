@@ -4,6 +4,8 @@ import { useTasks } from "@/context/task-context";
 import { useEffect, useState } from "react";
 import ModeEdit from "@mui/icons-material/ModeEdit";
 import Check from "@mui/icons-material/Check";
+import { useSession } from "next-auth/react";
+import Snackbar from "@mui/material/Snackbar";
 
 interface Task {
   uuid: string;
@@ -21,6 +23,9 @@ interface User {
 
 export const TaskDetails = () => {
   const { tasks, updateTask } = useTasks();
+  const { data: session } = useSession();
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
   const [editingTaskId, setEditingTaskId] = useState<string>();
   const [editedTask, setEditedTask] = useState({
     name: "",
@@ -41,6 +46,11 @@ export const TaskDetails = () => {
   }, []);
 
   const handleEdit = (task: Task) => {
+    if (session?.user?.role[0] !== "admin" && session?.user?.role[0] !== "manager") {
+      setSnackbarMessage("You do not have permission to edit tasks");
+      setSnackbarOpen(true);
+      return;
+    }
     setEditingTaskId(task.uuid);
     setEditedTask({
       name: task.name,
@@ -85,7 +95,7 @@ export const TaskDetails = () => {
               tasks.map((task) => (
                 <tr key={task.uuid} className="w-full border-b border-gray-200 hover:bg-gray-100">
                   <td className="px-6 py-3 text-left">
-                    {editingTaskId === task.uuid ? (
+                    {editingTaskId === task.uuid && session?.user?.role[0] === "admin" ? (
                       <div>
                         <input
                           type="text"
@@ -100,7 +110,7 @@ export const TaskDetails = () => {
                     )}
                   </td>
                   <td className="px-6 py-3 text-left">
-                    {editingTaskId === task.uuid ? (
+                    {editingTaskId === task.uuid && session?.user?.role[0] === "admin" ? (
                       <textarea
                         value={editedTask.description}
                         onChange={(e) =>
@@ -113,7 +123,7 @@ export const TaskDetails = () => {
                     )}
                   </td>
                   <td className="px-6 py-3 text-left">
-                    {editingTaskId === task.uuid ? (
+                    {editingTaskId === task.uuid && session?.user?.role[0] === "admin" ? (
                       <select
                         value={editedTask.status}
                         onChange={(e) => setEditedTask({ ...editedTask, status: e.target.value })}
@@ -133,7 +143,8 @@ export const TaskDetails = () => {
                   </td>
                   <td className="px-6 py-3 text-left">{new Date(task.createdAt).toDateString()}</td>
                   <td className="px-6 py-3 text-left">
-                    {editingTaskId === task.uuid ? (
+                    {editingTaskId === task.uuid &&
+                    (session?.user?.role[0] === "admin" || session?.user?.role[0] === "manager") ? (
                       <select
                         value={editedTask.assignedTo}
                         onChange={(e) =>
@@ -176,6 +187,12 @@ export const TaskDetails = () => {
             )}
           </tbody>
         </table>
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={3000}
+          onClose={() => setSnackbarOpen(false)}
+          message={snackbarMessage}
+        />
       </div>
     </div>
   );

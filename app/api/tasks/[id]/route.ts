@@ -2,8 +2,14 @@ import dbConnect from "../../../../utils/mongodb";
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 import Task from "../../../../models/Task";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+  const session = await getServerSession(authOptions);
+  if (!session || !(session.user.role[0] === "admin" || session.user.role[0] === "manager")) {
+    return NextResponse.json({ message: "Permission denied" }, { status: 403 });
+  }
   await dbConnect();
   const body = await req.json();
   try {
@@ -18,6 +24,10 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 }
 
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+  const session = await getServerSession(authOptions);
+  if (!session || !(session.user.role[0] === "admin")) {
+    return NextResponse.json({ message: "Permission denied" }, { status: 403 });
+  }
   await dbConnect();
   try {
     await Task.findOneAndDelete({ uuid: params.id });

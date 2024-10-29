@@ -13,6 +13,10 @@ const UserDetailsPage = async () => {
 
   const editUser = async (email: string, updates: Partial<{ name: string }>) => {
     "use server";
+    if (!session) {
+      console.error("No session found. Editing not allowed.");
+      return;
+    }
     await dbConnect();
     await User.updateOne({ email }, updates);
   };
