@@ -6,11 +6,12 @@ import { useTasks } from "@/context/task-context";
 import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
 import Snackbar from "@mui/material/Snackbar";
+import { UserRole } from "@/models/User";
 
 interface User {
   email: string;
   name: string;
-  role: string[];
+  role: UserRole[];
 }
 
 export const AddNewTask = () => {

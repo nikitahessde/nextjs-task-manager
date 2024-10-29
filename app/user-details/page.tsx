@@ -3,6 +3,7 @@ import dbConnect from "@/utils/mongodb";
 import User from "@/models/User";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { UserRole } from "@/models/User";
 
 const UserDetailsPage = async () => {
   await dbConnect();
@@ -13,7 +14,7 @@ const UserDetailsPage = async () => {
 
   const editUser = async (email: string, updates: Partial<{ name: string }>) => {
     "use server";
-    if (!session) {
+    if (!session || !(session.user.role.includes(UserRole.Admin) || session.user.role.includes(UserRole.Manager))) {
       console.error("No session found. Editing not allowed.");
       return;
     }

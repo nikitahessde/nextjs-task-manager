@@ -2,12 +2,13 @@
 
 import dbConnect from "@/utils/mongodb";
 import User from "@/models/User";
+import { UserRole } from "@/models/User";
 
 export const register = async (values: {
   email: string;
   password: string;
   name: string;
-  role: string[];
+  role: UserRole[];
 }) => {
   const { email, password, name, role } = values;
   try {

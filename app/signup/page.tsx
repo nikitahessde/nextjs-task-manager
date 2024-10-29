@@ -4,12 +4,13 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { register as registerAction } from "@/actions/register";
 import { useForm } from "react-hook-form";
+import { UserRole } from "@/models/User";
 
 type RegistrationFormData = {
   email: string;
   password: string;
   name: string;
-  role: string[];
+  role: UserRole[];
   confirmPassword: string;
 };
 

@@ -1,7 +1,9 @@
+import { UserRole } from "@/models/User";
+
 interface User {
   name: string;
   email: string;
-  role: string[];
+  role: UserRole[];
   createdAt: Date;
 }
 
