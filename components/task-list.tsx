@@ -5,6 +5,7 @@ import { useTasks } from "@/context/task-context";
 import { Snackbar, Tooltip } from "@mui/material";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
+import { UserRole } from "@/models/User";
 
 interface Task {
   uuid: string;
@@ -20,7 +21,7 @@ export const TaskList = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const handleStatusChange = (uuid: string, newStatus: string) => {
-    if (session?.user?.role[0] !== "admin") {
+    if (session?.user?.role.includes(UserRole.Admin)) {
       setSnackbarOpen(true);
       return;
     }
@@ -28,7 +29,7 @@ export const TaskList = () => {
   };
 
   const handleRemoveTask = (uuid: string) => {
-    if (session?.user?.role[0] !== "admin") {
+    if (session?.user?.role.includes(UserRole.Admin)) {
       setSnackbarOpen(true);
       return;
     }

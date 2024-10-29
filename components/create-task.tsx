@@ -44,7 +44,7 @@ export const AddNewTask = () => {
   });
 
   const onSubmit = (data: { taskName: string; taskDescription: string; assignedTo: string }) => {
-    if (session?.user?.role[0] !== "admin") {
+    if (session?.user?.role.includes(UserRole.Admin)) {
       setSnackbarOpen(true);
       return;
     }

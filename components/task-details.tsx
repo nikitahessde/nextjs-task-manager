@@ -6,6 +6,7 @@ import ModeEdit from "@mui/icons-material/ModeEdit";
 import Check from "@mui/icons-material/Check";
 import { useSession } from "next-auth/react";
 import Snackbar from "@mui/material/Snackbar";
+import { UserRole } from "@/models/User";
 
 interface Task {
   uuid: string;
@@ -46,7 +47,7 @@ export const TaskDetails = () => {
   }, []);
 
   const handleEdit = (task: Task) => {
-    if (session?.user?.role[0] !== "admin" && session?.user?.role[0] !== "manager") {
+    if (session?.user?.role.includes(UserRole.Admin) && session?.user?.role.includes(UserRole.Manager)) {
       setSnackbarMessage("You do not have permission to edit tasks");
       setSnackbarOpen(true);
       return;
@@ -95,7 +96,7 @@ export const TaskDetails = () => {
               tasks.map((task) => (
                 <tr key={task.uuid} className="w-full border-b border-gray-200 hover:bg-gray-100">
                   <td className="px-6 py-3 text-left">
-                    {editingTaskId === task.uuid && session?.user?.role[0] === "admin" ? (
+                    {editingTaskId === task.uuid && session?.user?.role.includes(UserRole.Admin) ? (
                       <div>
                         <input
                           type="text"
@@ -110,7 +111,7 @@ export const TaskDetails = () => {
                     )}
                   </td>
                   <td className="px-6 py-3 text-left">
-                    {editingTaskId === task.uuid && session?.user?.role[0] === "admin" ? (
+                    {editingTaskId === task.uuid && session?.user?.role.includes(UserRole.Admin) ? (
                       <textarea
                         value={editedTask.description}
                         onChange={(e) =>
@@ -123,7 +124,7 @@ export const TaskDetails = () => {
                     )}
                   </td>
                   <td className="px-6 py-3 text-left">
-                    {editingTaskId === task.uuid && session?.user?.role[0] === "admin" ? (
+                    {editingTaskId === task.uuid && session?.user?.role.includes(UserRole.Admin) ? (
                       <select
                         value={editedTask.status}
                         onChange={(e) => setEditedTask({ ...editedTask, status: e.target.value })}
@@ -144,7 +145,7 @@ export const TaskDetails = () => {
                   <td className="px-6 py-3 text-left">{new Date(task.createdAt).toDateString()}</td>
                   <td className="px-6 py-3 text-left">
                     {editingTaskId === task.uuid &&
-                    (session?.user?.role[0] === "admin" || session?.user?.role[0] === "manager") ? (
+                    (session?.user?.role.includes(UserRole.Admin) || session?.user?.role.includes(UserRole.Manager)) ? (
                       <select
                         value={editedTask.assignedTo}
                         onChange={(e) =>
