@@ -1,5 +1,5 @@
 import dbConnect from "@/utils/mongodb";
-import User from "@/models/User";
+import User, { UserRoles } from "@/models/User";
 import type { NextAuthOptions } from "next-auth";
 import credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
@@ -29,13 +29,13 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async jwt({ token, user }) {
-      if (user && "role" in user) {
-        token.role = user.role;
+      if (user && "roles" in user) {
+        token.roles = user.roles;
       }
       return token;
     },
     async session({ session, token }) {
-      session.user.role = token.role as string;
+      session.user.roles = token.roles as UserRoles[];
       return session;
     },
   },

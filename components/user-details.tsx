@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { UserRole } from "@/models/User";
+import { UserRoles } from "@/models/User";
 
 interface User {
   name: string;
   email: string;
-  role: UserRole[];
+  roles: UserRoles[];
   createdAt: Date;
 }
 
@@ -65,10 +65,10 @@ export const UserDetails = ({ user, editUser }: UserListProps) => {
             />
           </div>
           <div className="flex flex-col gap-2">
-            <label className="text-sm">Role</label>
+            <label className="text-sm">Roles</label>
             <input
               type="text"
-              value={user.role[0]}
+              value={user.roles.join(", ")}
               disabled
               className="rounded border bg-gray-200 p-2"
             />

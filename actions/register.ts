@@ -2,15 +2,15 @@
 
 import dbConnect from "@/utils/mongodb";
 import User from "@/models/User";
-import { UserRole } from "@/models/User";
+import { UserRoles } from "@/models/User";
 
 export const register = async (values: {
   email: string;
   password: string;
   name: string;
-  role: UserRole[];
+  roles: UserRoles[];
 }) => {
-  const { email, password, name, role } = values;
+  const { email, password, name, roles } = values;
   try {
     await dbConnect();
     const userFound = await User.findOne({ email });
@@ -23,7 +23,7 @@ export const register = async (values: {
       name,
       email,
       password,
-      role: [role],
+      roles: roles,
     });
     await user.save();
   } catch (e) {

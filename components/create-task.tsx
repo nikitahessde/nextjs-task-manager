@@ -6,12 +6,12 @@ import { useTasks } from "@/context/task-context";
 import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
 import Snackbar from "@mui/material/Snackbar";
-import { UserRole } from "@/models/User";
+import { UserRoles } from "@/models/User";
 
 interface User {
   email: string;
   name: string;
-  role: UserRole[];
+  role: UserRoles[];
 }
 
 export const AddNewTask = () => {
@@ -44,7 +44,7 @@ export const AddNewTask = () => {
   });
 
   const onSubmit = (data: { taskName: string; taskDescription: string; assignedTo: string }) => {
-    if (session?.user?.role.includes(UserRole.Admin)) {
+    if (!session?.user?.roles.includes(UserRoles.Admin)) {
       setSnackbarOpen(true);
       return;
     }

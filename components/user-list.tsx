@@ -1,9 +1,9 @@
-import { UserRole } from "@/models/User";
+import { UserRoles } from "@/models/User";
 
 interface User {
   name: string;
   email: string;
-  role: UserRole[];
+  roles: UserRoles[];
   createdAt: Date;
 }
 
@@ -28,7 +28,7 @@ export const UserList = ({ users }: UserListProps) => {
                   <p className="break-words text-sm text-gray-500">{user.email}</p>
                 </div>
               </div>
-              <p>{user.role[0]}</p>
+              <p>{user.roles.join(", ")}</p>
             </div>
           ))
         ) : (

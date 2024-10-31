@@ -3,18 +3,24 @@ import dbConnect from "@/utils/mongodb";
 import User from "@/models/User";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { UserRole } from "@/models/User";
+import { UserRoles } from "@/models/User";
 
 const UserDetailsPage = async () => {
   await dbConnect();
   const session = await getServerSession(authOptions);
   const user = await User.findOne({ email: session?.user.email }).select(
-    "name email role createdAt",
+    "name email roles createdAt",
   );
 
   const editUser = async (email: string, updates: Partial<{ name: string }>) => {
     "use server";
-    if (!session || !(session.user.role.includes(UserRole.Admin) || session.user.role.includes(UserRole.Manager))) {
+    if (
+      !session ||
+      !(
+        session.user.roles.includes(UserRoles.Admin) ||
+        session.user.roles.includes(UserRoles.Manager)
+      )
+    ) {
       console.error("No session found. Editing not allowed.");
       return;
     }
