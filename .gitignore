@@ -31,6 +31,9 @@ yarn-error.log*
 # .env
 .env
 
+# .idea
+.idea
+
 # vercel
 .vercel
 

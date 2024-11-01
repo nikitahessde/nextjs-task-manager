@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 export async function GET() {
   await dbConnect();
   try {
-    const users = await User.find();
+    const users = await User.find().select("-password");
     return NextResponse.json(users);
   } catch (error) {
     console.error("Error fetching users:", error);

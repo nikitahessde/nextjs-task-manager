@@ -3,6 +3,9 @@
 import { DeleteOutline } from "@mui/icons-material";
 import { useTasks } from "@/context/task-context";
 import { Tooltip } from "@mui/material";
+import { useSession } from "next-auth/react";
+import { UserRole } from "@/models/User";
+import { useSnackbar } from "@/context/snackbar-context";
 
 interface Task {
   uuid: string;
@@ -14,6 +17,25 @@ interface Task {
 
 export const TaskList = () => {
   const { tasks, removeTask, changeStatus } = useTasks();
+  const { showSnackbar } = useSnackbar()
+  const { data: session } = useSession();
+
+  const handleStatusChange = (uuid: string, newStatus: string) => {
+    if (!session?.user?.roles.includes(UserRole.Admin)) {
+      showSnackbar("You do not have permission to interact with tasks");
+      return;
+    }
+    changeStatus(uuid, newStatus);
+  };
+
+  const handleRemoveTask = (uuid: string) => {
+    if (!session?.user?.roles.includes(UserRole.Admin)) {
+      showSnackbar("You do not have permission to interact with tasks");
+      return;
+    }
+    removeTask(uuid);
+  };
+
   return (
     <div className="flex flex-col gap-4 overflow-y-auto rounded-lg border-2 border-primary bg-secondary p-4">
       <p className="text-xl font-semibold">Task list</p>
@@ -36,7 +58,7 @@ export const TaskList = () => {
                 <select
                   className="rounded-md border px-2 py-1 text-sm"
                   value={task.status}
-                  onChange={(e) => task.uuid && changeStatus(task.uuid, e.target.value)}
+                  onChange={(e) => task.uuid && handleStatusChange(task.uuid, e.target.value)}
                 >
                   <option value="todo">To do</option>
                   <option value="inProgress">In progress</option>
@@ -44,7 +66,7 @@ export const TaskList = () => {
                 </select>
                 <DeleteOutline
                   className="cursor-pointer"
-                  onClick={() => task.uuid && removeTask(task.uuid)}
+                  onClick={() => task.uuid && handleRemoveTask(task.uuid)}
                 />
               </div>
             </div>

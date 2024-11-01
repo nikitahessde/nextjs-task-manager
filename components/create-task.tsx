@@ -4,16 +4,22 @@ import { useEffect, useState } from "react";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { useTasks } from "@/context/task-context";
 import { useForm } from "react-hook-form";
+import { useSession } from "next-auth/react";
+import { UserRole } from "@/models/User";
+import { useSnackbar } from "@/context/snackbar-context";
 
 interface User {
   email: string;
   name: string;
+  roles: UserRole[];
 }
 
 export const AddNewTask = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
   const { addTask } = useTasks();
+  const { showSnackbar } = useSnackbar()
+  const { data: session } = useSession();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -22,7 +28,7 @@ export const AddNewTask = () => {
       setUsers(data);
     };
     fetchUsers();
-  }, []);
+  }, [session]);
 
   const {
     register,
@@ -38,6 +44,10 @@ export const AddNewTask = () => {
   });
 
   const onSubmit = (data: { taskName: string; taskDescription: string; assignedTo: string }) => {
+    if (!session?.user?.roles.includes(UserRole.Admin)) {
+      showSnackbar('You do not have permission to add tasks')
+      return;
+    }
     const newTask = {
       uuid: crypto.randomUUID(),
       name: data.taskName,
@@ -110,7 +120,6 @@ export const AddNewTask = () => {
             <select
               id="assignTo"
               {...register("assignedTo")}
-              required
               className="w-full rounded-lg border border-gray-400 p-2 text-sm"
             >
               <option value="">Assign to...</option>

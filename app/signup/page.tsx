@@ -1,9 +1,18 @@
 "use client";
-import { useState } from "react";
+
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { register as registerAction } from "@/actions/register";
 import { useForm } from "react-hook-form";
+import { UserRole } from "@/models/User";
+
+type RegistrationFormData = {
+  email: string;
+  password: string;
+  name: string;
+  roles: UserRole[];
+  confirmPassword: string;
+};
 
 export default function Register() {
   const {
@@ -12,19 +21,17 @@ export default function Register() {
     formState: { errors },
     reset,
     getValues,
-  } = useForm({
+  } = useForm<RegistrationFormData>({
     criteriaMode: "all",
   });
   const router = useRouter();
-  const [error, setErrorState] = useState<string | null>(null);
 
-  const onSubmit = async (data: any) => {
-    const { email, password, name } = data;
+  const onSubmit = async (data: RegistrationFormData) => {
+    const { email, password, name, roles } = data;
 
-    const r = await registerAction({ email, password, name });
+    const r = await registerAction({ email, password, name, roles });
     reset();
     if (r?.error) {
-      setErrorState(r.error);
       return;
     } else {
       return router.push("/login");
@@ -57,6 +64,23 @@ export default function Register() {
             {...register("email", { required: true })}
           />
           {errors.email && <span className="text-xs text-red-500">This field is required</span>}
+        </div>
+        <div className="flex flex-col gap-2">
+          <label className="w-full text-sm">Role</label>
+          <div className="flex flex-wrap gap-2">
+            {Object.values(UserRole).map((role) => (
+              <label key={role} className="flex items-center">
+                <input
+                  type="checkbox"
+                  value={role}
+                  className="mr-2"
+                  {...register("roles", { required: true })}
+                />
+                <span>{role}</span>
+              </label>
+            ))}
+          </div>
+          {errors.roles && <span className="text-xs text-red-500">This field is required</span>}
         </div>
         <div className="flex flex-col gap-2">
           <label className="w-full text-sm">Password</label>

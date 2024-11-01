@@ -1,7 +1,20 @@
 import mongoose from "mongoose";
 import { hash, compare } from "bcryptjs";
 
-const userSchema = new mongoose.Schema(
+export enum UserRole {
+  Admin = "admin",
+  Manager = "manager",
+  Developer = "developer",
+}
+
+interface IUser {
+  email: string;
+  password: string;
+  name: string;
+  roles: UserRole[];
+}
+
+const userSchema = new mongoose.Schema<IUser>(
   {
     email: {
       type: String,
@@ -16,6 +29,11 @@ const userSchema = new mongoose.Schema(
     name: {
       type: String,
       required: [true, "Name is required"],
+    },
+    roles: {
+      type: [String],
+      enum: UserRole,
+      required: [true, "Role is required"],
     },
   },
   {
@@ -34,6 +52,6 @@ userSchema.methods.comparePassword = function (password: string) {
   return compare(password, this.password);
 };
 
-const User = mongoose.models.User || mongoose.model("User", userSchema);
+const User = mongoose.models?.User || mongoose.model<IUser>("User", userSchema);
 
 export default User;
