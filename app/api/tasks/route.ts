@@ -3,11 +3,11 @@ import Task from "../../../models/Task";
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { UserRoles } from "@/models/User";
+import { UserRole } from "@/models/User";
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
-  if (!session || !session.user.roles.includes(UserRoles.Admin)) {
+  if (!session || !session.user.roles.includes(UserRole.Admin)) {
     return NextResponse.json({ message: "Permission denied" }, { status: 403 });
   }
   await dbConnect();

@@ -1,9 +1,9 @@
-import { UserRoles } from "@/models/User";
+import { UserRole } from "@/models/User";
 
 interface User {
   name: string;
   email: string;
-  roles: UserRoles[];
+  roles: UserRole[];
   createdAt: Date;
 }
 

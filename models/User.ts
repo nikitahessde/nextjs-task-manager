@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { hash, compare } from "bcryptjs";
 
-export enum UserRoles {
+export enum UserRole {
   Admin = "admin",
   Manager = "manager",
   Developer = "developer",
@@ -11,7 +11,7 @@ interface IUser {
   email: string;
   password: string;
   name: string;
-  roles: UserRoles[];
+  roles: UserRole[];
 }
 
 const userSchema = new mongoose.Schema<IUser>(
@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema<IUser>(
     },
     roles: {
       type: [String],
-      enum: UserRoles,
+      enum: UserRole,
       required: [true, "Role is required"],
     },
   },

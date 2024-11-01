@@ -2,10 +2,10 @@
 
 import { DeleteOutline } from "@mui/icons-material";
 import { useTasks } from "@/context/task-context";
-import { Snackbar, Tooltip } from "@mui/material";
+import { Tooltip } from "@mui/material";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
-import { UserRoles } from "@/models/User";
+import { UserRole } from "@/models/User";
+import { useSnackbar } from "@/context/snackbar-context";
 
 interface Task {
   uuid: string;
@@ -17,27 +17,23 @@ interface Task {
 
 export const TaskList = () => {
   const { tasks, removeTask, changeStatus } = useTasks();
+  const { showSnackbar } = useSnackbar()
   const { data: session } = useSession();
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const handleStatusChange = (uuid: string, newStatus: string) => {
-    if (!session?.user?.roles.includes(UserRoles.Admin)) {
-      setSnackbarOpen(true);
+    if (!session?.user?.roles.includes(UserRole.Admin)) {
+      showSnackbar("You do not have permission to interact with tasks");
       return;
     }
     changeStatus(uuid, newStatus);
   };
 
   const handleRemoveTask = (uuid: string) => {
-    if (!session?.user?.roles.includes(UserRoles.Admin)) {
-      setSnackbarOpen(true);
+    if (!session?.user?.roles.includes(UserRole.Admin)) {
+      showSnackbar("You do not have permission to interact with tasks");
       return;
     }
     removeTask(uuid);
-  };
-
-  const handleCloseSnackbar = () => {
-    setSnackbarOpen(false);
   };
 
   return (
@@ -79,12 +75,6 @@ export const TaskList = () => {
           <p>No tasks to show</p>
         )}
       </div>
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={handleCloseSnackbar}
-        message={"You do not have permission to interact with tasks"}
-      />
     </div>
   );
 };

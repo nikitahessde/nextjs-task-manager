@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 import ModeEdit from "@mui/icons-material/ModeEdit";
 import Check from "@mui/icons-material/Check";
 import { useSession } from "next-auth/react";
-import Snackbar from "@mui/material/Snackbar";
-import { UserRoles } from "@/models/User";
+import { UserRole } from "@/models/User";
+import { useSnackbar } from "@/context/snackbar-context";
 
 interface Task {
   uuid: string;
@@ -25,8 +25,7 @@ interface User {
 export const TaskDetails = () => {
   const { tasks, updateTask } = useTasks();
   const { data: session } = useSession();
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const { showSnackbar } = useSnackbar()
   const [editingTaskId, setEditingTaskId] = useState<string>();
   const [editedTask, setEditedTask] = useState({
     name: "",
@@ -48,11 +47,10 @@ export const TaskDetails = () => {
 
   const handleEdit = (task: Task) => {
     if (
-      !session?.user?.roles.includes(UserRoles.Admin) &&
-      !session?.user?.roles.includes(UserRoles.Manager)
+      !session?.user?.roles.includes(UserRole.Admin) &&
+      !session?.user?.roles.includes(UserRole.Manager)
     ) {
-      setSnackbarMessage("You do not have permission to edit tasks");
-      setSnackbarOpen(true);
+      showSnackbar('You do not have permission to edit tasks')
       return;
     }
     setEditingTaskId(task.uuid);
@@ -100,7 +98,7 @@ export const TaskDetails = () => {
                 <tr key={task.uuid} className="w-full border-b border-gray-200 hover:bg-gray-100">
                   <td className="px-6 py-3 text-left">
                     {editingTaskId === task.uuid &&
-                    session?.user?.roles.includes(UserRoles.Admin) ? (
+                    session?.user?.roles.includes(UserRole.Admin) ? (
                       <div>
                         <input
                           type="text"
@@ -116,7 +114,7 @@ export const TaskDetails = () => {
                   </td>
                   <td className="px-6 py-3 text-left">
                     {editingTaskId === task.uuid &&
-                    session?.user?.roles.includes(UserRoles.Admin) ? (
+                    session?.user?.roles.includes(UserRole.Admin) ? (
                       <textarea
                         value={editedTask.description}
                         onChange={(e) =>
@@ -130,7 +128,7 @@ export const TaskDetails = () => {
                   </td>
                   <td className="px-6 py-3 text-left">
                     {editingTaskId === task.uuid &&
-                    session?.user?.roles.includes(UserRoles.Admin) ? (
+                    session?.user?.roles.includes(UserRole.Admin) ? (
                       <select
                         value={editedTask.status}
                         onChange={(e) => setEditedTask({ ...editedTask, status: e.target.value })}
@@ -151,8 +149,8 @@ export const TaskDetails = () => {
                   <td className="px-6 py-3 text-left">{new Date(task.createdAt).toDateString()}</td>
                   <td className="px-6 py-3 text-left">
                     {editingTaskId === task.uuid &&
-                    (session?.user?.roles.includes(UserRoles.Admin) ||
-                      session?.user?.roles.includes(UserRoles.Manager)) ? (
+                    (session?.user?.roles.includes(UserRole.Admin) ||
+                      session?.user?.roles.includes(UserRole.Manager)) ? (
                       <select
                         value={editedTask.assignedTo}
                         onChange={(e) =>
@@ -195,12 +193,6 @@ export const TaskDetails = () => {
             )}
           </tbody>
         </table>
-        <Snackbar
-          open={snackbarOpen}
-          autoHideDuration={3000}
-          onClose={() => setSnackbarOpen(false)}
-          message={snackbarMessage}
-        />
       </div>
     </div>
   );

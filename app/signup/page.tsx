@@ -4,13 +4,13 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { register as registerAction } from "@/actions/register";
 import { useForm } from "react-hook-form";
-import { UserRoles } from "@/models/User";
+import { UserRole } from "@/models/User";
 
 type RegistrationFormData = {
   email: string;
   password: string;
   name: string;
-  roles: UserRoles[];
+  roles: UserRole[];
   confirmPassword: string;
 };
 
@@ -68,7 +68,7 @@ export default function Register() {
         <div className="flex flex-col gap-2">
           <label className="w-full text-sm">Role</label>
           <div className="flex flex-wrap gap-2">
-            {Object.values(UserRoles).map((role) => (
+            {Object.values(UserRole).map((role) => (
               <label key={role} className="flex items-center">
                 <input
                   type="checkbox"

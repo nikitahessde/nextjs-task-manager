@@ -5,20 +5,20 @@ import { ExpandLess, ExpandMore } from "@mui/icons-material";
 import { useTasks } from "@/context/task-context";
 import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
-import Snackbar from "@mui/material/Snackbar";
-import { UserRoles } from "@/models/User";
+import { UserRole } from "@/models/User";
+import { useSnackbar } from "@/context/snackbar-context";
 
 interface User {
   email: string;
   name: string;
-  role: UserRoles[];
+  roles: UserRole[];
 }
 
 export const AddNewTask = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
   const { addTask } = useTasks();
+  const { showSnackbar } = useSnackbar()
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -44,8 +44,8 @@ export const AddNewTask = () => {
   });
 
   const onSubmit = (data: { taskName: string; taskDescription: string; assignedTo: string }) => {
-    if (!session?.user?.roles.includes(UserRoles.Admin)) {
-      setSnackbarOpen(true);
+    if (!session?.user?.roles.includes(UserRole.Admin)) {
+      showSnackbar('You do not have permission to add tasks')
       return;
     }
     const newTask = {
@@ -141,12 +141,6 @@ export const AddNewTask = () => {
           Add Task
         </button>
       </form>
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={() => setSnackbarOpen(false)}
-        message={"You do not have permission to add tasks"}
-      />
     </div>
   );
 };
