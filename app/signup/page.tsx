@@ -34,6 +34,7 @@ export default function Register() {
     const r = await registerAction({ email, password, name, roles });
     reset();
     if (r?.error) {
+      return;
     } else {
       return router.push("/login");
     }
