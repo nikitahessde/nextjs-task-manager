@@ -3,6 +3,7 @@ import User, { UserRole } from "@/models/User";
 import type { NextAuthOptions } from "next-auth";
 import credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
+import { getTranslations } from "next-intl/server";
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -15,10 +16,11 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
+        const t = await getTranslations("login");
         await dbConnect();
         const user = await User.findOne({ email: credentials?.email }).select("+password");
         if (!user || !(await bcrypt.compare(credentials!.password, user.password))) {
-          throw new Error("Wrong email and/or password");
+          throw new Error(t("wrong-credentials"));
         }
         return user;
       },

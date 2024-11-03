@@ -10,9 +10,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   const session = await getServerSession(authOptions);
   if (
     !session ||
-    !(
-      session.user.roles.includes(UserRole.Admin) || session.user.roles.includes(UserRole.Manager)
-    )
+    !(session.user.roles.includes(UserRole.Admin) || session.user.roles.includes(UserRole.Manager))
   ) {
     return NextResponse.json({ message: "Permission denied" }, { status: 403 });
   }

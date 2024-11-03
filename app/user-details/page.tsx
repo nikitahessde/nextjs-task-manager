@@ -14,11 +14,11 @@ const UserDetailsPage = async () => {
 
   const editUser = async (email: string, updates: Partial<{ name: string }>) => {
     "use server";
+    const session = await getServerSession(authOptions);
     if (
       !session ||
       !(
-        session.user.roles.includes(UserRole.Admin) ||
-        session.user.roles.includes(UserRole.Manager)
+        session.user.roles.includes(UserRole.Admin) || session.user.roles.includes(UserRole.Manager)
       )
     ) {
       console.error("No session found. Editing not allowed.");

@@ -3,6 +3,7 @@
 import dbConnect from "@/utils/mongodb";
 import User from "@/models/User";
 import { UserRole } from "@/models/User";
+import { getTranslations } from "next-intl/server";
 
 export const register = async (values: {
   email: string;
@@ -10,13 +11,14 @@ export const register = async (values: {
   name: string;
   roles: UserRole[];
 }) => {
+  const t = await getTranslations("signup");
   const { email, password, name, roles } = values;
   try {
     await dbConnect();
     const userFound = await User.findOne({ email });
     if (userFound) {
       return {
-        error: "Email already exists!",
+        error: t("existing-email"),
       };
     }
     const user = new User({

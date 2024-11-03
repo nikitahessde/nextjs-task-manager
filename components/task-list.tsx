@@ -6,6 +6,7 @@ import { Tooltip } from "@mui/material";
 import { useSession } from "next-auth/react";
 import { UserRole } from "@/models/User";
 import { useSnackbar } from "@/context/snackbar-context";
+import { useTranslations } from "next-intl";
 
 interface Task {
   uuid: string;
@@ -16,8 +17,9 @@ interface Task {
 }
 
 export const TaskList = () => {
+  const t = useTranslations("task-list");
   const { tasks, removeTask, changeStatus } = useTasks();
-  const { showSnackbar } = useSnackbar()
+  const { showSnackbar } = useSnackbar();
   const { data: session } = useSession();
 
   const handleStatusChange = (uuid: string, newStatus: string) => {
@@ -38,7 +40,7 @@ export const TaskList = () => {
 
   return (
     <div className="flex flex-col gap-4 overflow-y-auto rounded-lg border-2 border-primary bg-secondary p-4">
-      <p className="text-xl font-semibold">Task list</p>
+      <p className="text-xl font-semibold">{t("task-list")}</p>
       <div className="flex flex-col gap-4">
         {tasks.length ? (
           tasks.map((task: Task) => (
@@ -60,9 +62,9 @@ export const TaskList = () => {
                   value={task.status}
                   onChange={(e) => task.uuid && handleStatusChange(task.uuid, e.target.value)}
                 >
-                  <option value="todo">To do</option>
-                  <option value="inProgress">In progress</option>
-                  <option value="done">Done</option>
+                  <option value="todo">{t("to-do")}</option>
+                  <option value="inProgress">{t("in-progress")}</option>
+                  <option value="done">{t("done")}</option>
                 </select>
                 <DeleteOutline
                   className="cursor-pointer"
@@ -72,7 +74,7 @@ export const TaskList = () => {
             </div>
           ))
         ) : (
-          <p>No tasks to show</p>
+          <p>{t("no-tasks")}</p>
         )}
       </div>
     </div>
