@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { UserRole } from "@/models/User";
+import { useTranslations } from "next-intl";
 
 interface User {
   name: string;
@@ -16,13 +17,14 @@ interface UserListProps {
 }
 
 export const UserDetails = ({ user, editUser }: UserListProps) => {
+  const t = useTranslations("user-details");
   const [editingUserEmail, setEditingUserEmail] = useState<string | undefined>();
   const [nameError, setNameError] = useState("");
   const [editedUser, setEditedUser] = useState<User>({ ...user });
 
   const handleSave = async () => {
     if (editedUser && editedUser.name.trim() === "") {
-      setNameError("Task name cannot be empty");
+      setNameError(t("empty-name"));
       return;
     }
 
@@ -43,7 +45,7 @@ export const UserDetails = ({ user, editUser }: UserListProps) => {
       <div className="w-full overflow-x-auto rounded-lg">
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-2">
-            <label className="text-sm">Name</label>
+            <label className="text-sm">{t("name")}</label>
             <input
               type="text"
               value={editedUser.name}
@@ -56,7 +58,7 @@ export const UserDetails = ({ user, editUser }: UserListProps) => {
             {nameError && <div className="text-xs text-red-500">{nameError}</div>}
           </div>
           <div className="flex flex-col gap-2">
-            <label className="text-sm">Email</label>
+            <label className="text-sm">{t("email")}</label>
             <input
               type="email"
               value={user.email}
@@ -65,7 +67,7 @@ export const UserDetails = ({ user, editUser }: UserListProps) => {
             />
           </div>
           <div className="flex flex-col gap-2">
-            <label className="text-sm">Roles</label>
+            <label className="text-sm">{t("roles")}</label>
             <input
               type="text"
               value={user.roles.join(", ")}
@@ -80,13 +82,13 @@ export const UserDetails = ({ user, editUser }: UserListProps) => {
                   onClick={handleSave}
                   className="cursor-pointer rounded-lg bg-primary px-4 py-2 text-sm text-white"
                 >
-                  Save
+                  {t("save")}
                 </button>
                 <button
                   onClick={handleCancel}
                   className="cursor-pointer rounded-lg border border-black px-4 py-2 text-sm"
                 >
-                  Cancel
+                  {t("cancel")}
                 </button>
               </div>
             )}

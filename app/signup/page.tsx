@@ -5,6 +5,7 @@ import Link from "next/link";
 import { register as registerAction } from "@/actions/register";
 import { useForm } from "react-hook-form";
 import { UserRole } from "@/models/User";
+import { useTranslations } from "next-intl";
 
 type RegistrationFormData = {
   email: string;
@@ -15,6 +16,7 @@ type RegistrationFormData = {
 };
 
 export default function Register() {
+  const t = useTranslations("signup");
   const {
     register,
     handleSubmit,
@@ -44,29 +46,29 @@ export default function Register() {
         onSubmit={handleSubmit(onSubmit)}
         className="flex w-full flex-col justify-between gap-7 rounded"
       >
-        <p className="text-xl font-semibold">Register</p>
+        <p className="text-xl font-semibold">{t("register")}</p>
         <div className="flex flex-col gap-2">
-          <label className="w-full text-sm">Full Name</label>
+          <label className="w-full text-sm">{t("full-name")}</label>
           <input
             type="text"
-            placeholder="Full Name"
+            placeholder={t("full-name")}
             className="w-full rounded-lg border border-gray-400 p-2 text-sm"
             {...register("name", { required: true })}
           />
-          {errors.name && <span className="text-xs text-red-500">This field is required</span>}
+          {errors.name && <span className="text-xs text-red-500">{t("field-is-required")}</span>}
         </div>
         <div className="flex flex-col gap-2">
-          <label className="w-full text-sm">Email</label>
+          <label className="w-full text-sm">{t("email")}</label>
           <input
             type="email"
-            placeholder="Email"
+            placeholder={t("email")}
             className="w-full rounded-lg border border-gray-400 p-2 text-sm"
             {...register("email", { required: true })}
           />
-          {errors.email && <span className="text-xs text-red-500">This field is required</span>}
+          {errors.email && <span className="text-xs text-red-500">{t("field-is-required")}</span>}
         </div>
         <div className="flex flex-col gap-2">
-          <label className="w-full text-sm">Role</label>
+          <label className="w-full text-sm">{t("role")}</label>
           <div className="flex flex-wrap gap-2">
             {Object.values(UserRole).map((role) => (
               <label key={role} className="flex items-center">
@@ -80,26 +82,28 @@ export default function Register() {
               </label>
             ))}
           </div>
-          {errors.roles && <span className="text-xs text-red-500">This field is required</span>}
+          {errors.roles && <span className="text-xs text-red-500">{t("field-is-required")}</span>}
         </div>
         <div className="flex flex-col gap-2">
-          <label className="w-full text-sm">Password</label>
+          <label className="w-full text-sm">{t("password")}</label>
           <div className="flex w-full">
             <input
               type="password"
-              placeholder="Password"
+              placeholder={t("password")}
               className="w-full rounded-lg border border-gray-400 p-2 text-sm"
               {...register("password", { required: true })}
             />
           </div>
-          {errors.password && <span className="text-xs text-red-500">This field is required</span>}
+          {errors.password && (
+            <span className="text-xs text-red-500">{t("field-is-required")}</span>
+          )}
         </div>
         <div className="flex flex-col gap-2">
-          <label className="w-full text-sm">Confirm Password</label>
+          <label className="w-full text-sm">{t("confirm-password")}</label>
           <div className="flex w-full">
             <input
               type="password"
-              placeholder="Confirm Password"
+              placeholder={t("confirm-password")}
               className="w-full rounded-lg border border-gray-400 p-2 text-sm"
               {...register("confirmPassword", {
                 required: true,
@@ -108,20 +112,20 @@ export default function Register() {
             />
           </div>
           {errors.confirmPassword && (
-            <span className="text-xs text-red-500">Field is empty or passwords do not match</span>
+            <span className="text-xs text-red-500">{t("empty-field-password-match")}</span>
           )}
         </div>
         <button
           type="submit"
           className="inline-flex justify-center rounded-md border border-primary px-4 py-2 text-sm font-medium text-black"
         >
-          Sign up
+          {t("signup")}
         </button>
         <Link
           href="/login"
           className="ease text-sm text-[#888] transition duration-150 hover:text-black"
         >
-          Already have an account?
+          {t("already-have-account")}
         </Link>
       </form>
     </div>

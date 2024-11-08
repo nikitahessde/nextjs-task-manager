@@ -7,6 +7,7 @@ import Check from "@mui/icons-material/Check";
 import { useSession } from "next-auth/react";
 import { UserRole } from "@/models/User";
 import { useSnackbar } from "@/context/snackbar-context";
+import { useTranslations } from "next-intl";
 
 interface Task {
   uuid: string;
@@ -23,9 +24,10 @@ interface User {
 }
 
 export const TaskDetails = () => {
+  const t = useTranslations("task-details");
   const { tasks, updateTask } = useTasks();
   const { data: session } = useSession();
-  const { showSnackbar } = useSnackbar()
+  const { showSnackbar } = useSnackbar();
   const [editingTaskId, setEditingTaskId] = useState<string>();
   const [editedTask, setEditedTask] = useState({
     name: "",
@@ -50,7 +52,7 @@ export const TaskDetails = () => {
       !session?.user?.roles.includes(UserRole.Admin) &&
       !session?.user?.roles.includes(UserRole.Manager)
     ) {
-      showSnackbar('You do not have permission to edit tasks')
+      showSnackbar(t("permissions"));
       return;
     }
     setEditingTaskId(task.uuid);
@@ -65,7 +67,7 @@ export const TaskDetails = () => {
 
   const handleSave = (task: Task) => {
     if (editedTask.name.trim() === "") {
-      setNameError("Task name cannot be empty");
+      setNameError(t("empty-name"));
       return;
     }
     updateTask(task.uuid, {
@@ -84,12 +86,12 @@ export const TaskDetails = () => {
         <table className="w-full">
           <thead>
             <tr className="bg-gray-200 text-sm leading-normal text-gray-600">
-              <th className="px-6 py-3 text-left">Name</th>
-              <th className="px-6 py-3 text-left">Description</th>
-              <th className="px-6 py-3 text-left">Status</th>
-              <th className="px-6 py-3 text-left">Created At</th>
-              <th className="px-6 py-3 text-left">Assigned To</th>
-              <th className="px-6 py-3 text-left">Actions</th>
+              <th className="px-6 py-3 text-left">{t("name")}</th>
+              <th className="px-6 py-3 text-left">{t("description")}</th>
+              <th className="px-6 py-3 text-left">{t("status")}</th>
+              <th className="px-6 py-3 text-left">{t("created-at")}</th>
+              <th className="px-6 py-3 text-left">{t("assigned-to")}</th>
+              <th className="px-6 py-3 text-left">{t("actions")}</th>
             </tr>
           </thead>
           <tbody className="text-sm font-light text-gray-600">
@@ -134,16 +136,16 @@ export const TaskDetails = () => {
                         onChange={(e) => setEditedTask({ ...editedTask, status: e.target.value })}
                         className="rounded border p-2"
                       >
-                        <option value="todo">To do</option>
-                        <option value="inProgress">In Progress</option>
-                        <option value="done">Done</option>
+                        <option value="todo">{t("to-do")}</option>
+                        <option value="inProgress">{t("in-progress")}</option>
+                        <option value="done">{t("done")}</option>
                       </select>
                     ) : task.status === "todo" ? (
-                      "To do"
+                      t("to-do")
                     ) : task.status === "inProgress" ? (
-                      "In Progress"
+                      t("in-progress")
                     ) : (
-                      "Done"
+                      t("done")
                     )}
                   </td>
                   <td className="px-6 py-3 text-left">{new Date(task.createdAt).toDateString()}</td>
@@ -171,14 +173,14 @@ export const TaskDetails = () => {
                   <td className="px-6 py-3 text-left">
                     {editingTaskId === task.uuid ? (
                       <Check onClick={() => handleSave(task)} className="cursor-pointer">
-                        Save
+                        {t("save")}
                       </Check>
                     ) : (
                       <ModeEdit
                         onClick={() => task.uuid && handleEdit(task)}
                         className="cursor-pointer"
                       >
-                        Edit
+                        {t("edit")}
                       </ModeEdit>
                     )}
                   </td>
@@ -187,7 +189,7 @@ export const TaskDetails = () => {
             ) : (
               <tr>
                 <td colSpan={6} className="px-6 py-3 text-center text-base text-primary">
-                  No tasks
+                  {t("no-tasks")}
                 </td>
               </tr>
             )}

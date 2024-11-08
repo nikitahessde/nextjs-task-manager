@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { Snackbar } from "@mui/material";
 import React, { createContext, useContext, useState } from "react";
@@ -29,12 +29,7 @@ export const SnackbarProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     <SnackbarContext.Provider value={{ open, message, showSnackbar, closeSnackbar }}>
       {children}
       {open && (
-        <Snackbar
-          open={open}
-          autoHideDuration={3000}
-          onClose={closeSnackbar}
-          message={message}
-        />
+        <Snackbar open={open} autoHideDuration={3000} onClose={closeSnackbar} message={message} />
       )}
     </SnackbarContext.Provider>
   );

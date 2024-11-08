@@ -1,4 +1,5 @@
 import { UserRole } from "@/models/User";
+import { useTranslations } from "next-intl";
 
 interface User {
   name: string;
@@ -12,9 +13,10 @@ interface UserListProps {
 }
 
 export const UserList = ({ users }: UserListProps) => {
+  const t = useTranslations("user-list");
   return (
     <div className="flex flex-col gap-4 overflow-y-auto rounded-lg border-2 border-primary bg-secondary p-4">
-      <p className="text-xl font-semibold">User list</p>
+      <p className="text-xl font-semibold">{t("user-list")}</p>
       <div className="flex flex-col gap-4">
         {users.length ? (
           users.map((user: User) => (
@@ -32,7 +34,7 @@ export const UserList = ({ users }: UserListProps) => {
             </div>
           ))
         ) : (
-          <p>No users to show</p>
+          <p>{t("no-users")}</p>
         )}
       </div>
     </div>

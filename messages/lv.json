@@ -1,0 +1,86 @@
+{
+  "login": {
+    "login": "Ienākt",
+    "email": "E-pasts",
+    "password": "Parole",
+    "dont-have-account": "Nav konta?",
+    "fields-required": "Visi lauki ir obligāti",
+    "wrong-credentials": "Nepareizs e-pasts un/vai parole"
+  },
+  "signup": {
+    "register": "Reģistrēties",
+    "full-name": "Pilns vārds",
+    "field-is-required": "Šis lauks ir obligāts",
+    "email": "E-pasts",
+    "role": "Pozīcija",
+    "password": "Parole",
+    "confirm-password": "Apstiprināt paroli",
+    "empty-field-password-match": "Lauks ir tukšs vai paroles nesakrīt",
+    "signup": "Reģistrēties",
+    "already-have-account": "Jau ir konts?",
+    "existing-email": "E-pasts jau eksistē!"
+  },
+  "menu": {
+    "home": "Sākums",
+    "create-task": "Izveidot uzdevumu",
+    "task-list": "Uzdevumu saraksts",
+    "task-details": "Uzdevuma detaļas",
+    "user-list": "Lietotāju saraksts",
+    "user-details": "Lietotāja detaļas"
+  },
+  "create-task": {
+    "new-task": "Jauns uzdevums",
+    "task-name": "Uzdevuma nosaukums",
+    "task-name-required": "Uzdevuma nosaukums ir obligāts",
+    "enter-task-name": "Ievadiet uzdevuma nosaukumu",
+    "task-description": "Uzdevuma apraksts",
+    "task-description-required": "Uzdevuma apraksts ir obligāts",
+    "max-length": "Maksimālais garums ir",
+    "enter-task-description": "Ievadiet uzdevuma aprakstu",
+    "assignee": "Izpildītājs",
+    "assign-to": "Piešķirt...",
+    "add-task": "Pievienot uzdevumu",
+    "permissions": "Jums nav atļaujas pievienot uzdevumus"
+  },
+  "task-list": {
+    "task-list": "Uzdevumu saraksts",
+    "to-do": "Darāmās lietas",
+    "in-progress": "Procesā",
+    "done": "Pabeigts",
+    "no-tasks": "Nav uzdevumu, ko rādīt",
+    "permissions": "Jums nav atļaujas sazināties ar uzdevumiem"
+  },
+  "task-details": {
+    "name": "Nosaukums",
+    "description": "Apraksts",
+    "status": "Statuss",
+    "created-at": "Izveidots",
+    "assigned-to": "Piešķirts",
+    "actions": "Darbības",
+    "to-do": "Darāmās lietas",
+    "in-progress": "Procesā",
+    "done": "Pabeigts",
+    "save": "Saglabāt",
+    "edit": "Rediģēt",
+    "permissions": "Jums nav atļaujas rediģēt uzdevumus",
+    "empty-name": "Uzdevuma nosaukums nevar būt tukšs",
+    "no-tasks": "Nav uzdevumu, ko rādīt"
+  },
+  "user-list": {
+    "user-list": "Lietotāju saraksts",
+    "no-users": "Nav lietotāju, ko rādīt"
+  },
+  "user-details": {
+    "name": "Vārds",
+    "email": "E-pasts",
+    "roles": "Pozīcijas",
+    "save": "Saglabāt",
+    "cancel": "Atcelt",
+    "empty-name": "Vārda lauks nevar būt tukšs"
+  },
+  "settings": {
+    "language": "Valoda",
+    "english": "Angļu",
+    "latvian": "Latviešu"
+  }
+}

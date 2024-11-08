@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
 import { UserRole } from "@/models/User";
 import { useSnackbar } from "@/context/snackbar-context";
+import { useTranslations } from "next-intl";
 
 interface User {
   email: string;
@@ -15,10 +16,11 @@ interface User {
 }
 
 export const AddNewTask = () => {
+  const t = useTranslations("create-task");
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
   const { addTask } = useTasks();
-  const { showSnackbar } = useSnackbar()
+  const { showSnackbar } = useSnackbar();
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -45,7 +47,7 @@ export const AddNewTask = () => {
 
   const onSubmit = (data: { taskName: string; taskDescription: string; assignedTo: string }) => {
     if (!session?.user?.roles.includes(UserRole.Admin)) {
-      showSnackbar('You do not have permission to add tasks')
+      showSnackbar(t("permissions"));
       return;
     }
     const newTask = {
@@ -63,7 +65,7 @@ export const AddNewTask = () => {
   return (
     <div className="flex flex-col gap-4 rounded-lg border-2 border-primary bg-secondary p-4">
       <div className="flex justify-between">
-        <p className="text-xl font-semibold">New task</p>
+        <p className="text-xl font-semibold">{t("new-task")}</p>
         {isCollapsed ? (
           <ExpandMore onClick={() => setIsCollapsed(false)} className="cursor-pointer" />
         ) : (
@@ -77,17 +79,17 @@ export const AddNewTask = () => {
         <div className="flex flex-col gap-1">
           <div className="flex flex-col gap-2">
             <label htmlFor="taskName" className="block text-sm font-medium text-primary">
-              Task Name
+              {t("new-task")}
             </label>
             <input
               type="text"
               id="taskName"
               {...register("taskName", {
-                required: "Task name is required",
-                maxLength: { value: 50, message: "Max length is 50" },
+                required: t("task-name-required"),
+                maxLength: { value: 50, message: t("max-length") + "50" },
               })}
               className="w-full rounded-lg border border-gray-400 p-2 text-sm"
-              placeholder="Enter task name"
+              placeholder={t("enter-task-name")}
             />
           </div>
           {errors.taskName && <div className="text-xs text-red-500">{errors.taskName.message}</div>}
@@ -95,17 +97,17 @@ export const AddNewTask = () => {
         <div className="flex flex-col gap-1">
           <div className="flex flex-col gap-2">
             <label htmlFor="taskDescription" className="block text-sm font-medium text-primary">
-              Task Description
+              {t("task-description")}
             </label>
             <textarea
               id="taskDescription"
               {...register("taskDescription", {
-                required: "Task description is required",
-                maxLength: { value: 150, message: "Max length is 150" },
+                required: t("task-description-required"),
+                maxLength: { value: 150, message: t("max-length") + "150" },
               })}
               rows={3}
               className="w-full rounded-lg border border-gray-400 p-2 text-sm"
-              placeholder="Enter task description"
+              placeholder={t("enter-task-description")}
             ></textarea>
           </div>
           {errors.taskDescription && (
@@ -115,14 +117,14 @@ export const AddNewTask = () => {
         <div className="flex flex-col gap-1">
           <div className="flex flex-col gap-2">
             <label htmlFor="assignTo" className="block text-sm font-medium text-primary">
-              Assignee
+              {t("assignee")}
             </label>
             <select
               id="assignTo"
               {...register("assignedTo")}
               className="w-full rounded-lg border border-gray-400 p-2 text-sm"
             >
-              <option value="">Assign to...</option>
+              <option value="">{t("assign-to")}</option>
               {users.map((user) => (
                 <option key={user.email} value={user.email}>
                   {user.name} ({user.email})
@@ -138,7 +140,7 @@ export const AddNewTask = () => {
           type="submit"
           className="inline-flex justify-center rounded-md border border-primary px-4 py-2 text-sm font-medium text-black"
         >
-          Add Task
+          {t("add-task")}
         </button>
       </form>
     </div>

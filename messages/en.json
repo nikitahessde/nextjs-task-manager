@@ -1,0 +1,86 @@
+{
+  "login": {
+    "login": "Log In",
+    "email": "Email",
+    "password": "Password",
+    "dont-have-account": "Don't have an account?",
+    "fields-required": "All fields are required",
+    "wrong-credentials": "Wrong email and/or password"
+  },
+  "signup": {
+    "register": "Register",
+    "full-name": "Full Name",
+    "field-is-required": "This field is required",
+    "email": "Email",
+    "role": "Role",
+    "password": "Password",
+    "confirm-password": "Confirm Password",
+    "empty-field-password-match": "Field is empty or passwords do not match",
+    "signup": "Sign up",
+    "already-have-account": "Already have an account?",
+    "existing-email": "Email already exists!"
+  },
+  "menu": {
+    "home": "Home",
+    "create-task": "Create Task",
+    "task-list": "Task List",
+    "task-details": "Task Details",
+    "user-list": "User List",
+    "user-details": "User Details"
+  },
+  "create-task": {
+    "new-task": "New task",
+    "task-name": "Task Name",
+    "task-name-required": "Task name is required",
+    "enter-task-name": "Enter task name",
+    "task-description": "Task Description",
+    "task-description-required": "Task description is required",
+    "max-length": "Max length is",
+    "enter-task-description": "Enter task description",
+    "assignee": "Assignee",
+    "assign-to": "Assign to...",
+    "add-task": "Add Task",
+    "permissions": "You do not have permission to add tasks"
+  },
+  "task-list": {
+    "task-list": "Task list",
+    "to-do": "To do",
+    "in-progress": "In progress",
+    "done": "Done",
+    "no-tasks": "No tasks to show",
+    "permissions": "You do not have permission to interact with tasks"
+  },
+  "task-details": {
+    "name": "Name",
+    "description": "Description",
+    "status": "Status",
+    "created-at": "Created At",
+    "assigned-to": "Assigned To",
+    "actions": "Actions",
+    "to-do": "To do",
+    "in-progress": "In progress",
+    "done": "Done",
+    "save": "Save",
+    "edit": "Edit",
+    "permissions": "You do not have permission to edit tasks",
+    "empty-name": "Task name cannot be empty",
+    "no-tasks": "No tasks to show"
+  },
+  "user-list": {
+    "user-list": "User list",
+    "no-users": "No users to show"
+  },
+  "user-details": {
+    "name": "Name",
+    "email": "Email",
+    "roles": "Roles",
+    "save": "Save",
+    "cancel": "Cancel",
+    "empty-name": "Task name cannot be empty"
+  },
+  "settings": {
+    "language": "Language",
+    "english": "English",
+    "latvian": "Latvian"
+  }
+}
