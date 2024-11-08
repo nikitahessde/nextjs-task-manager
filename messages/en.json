@@ -68,7 +68,8 @@
   },
   "user-list": {
     "user-list": "User list",
-    "no-users": "No users to show"
+    "no-users": "No users to show",
+    "search": "Name, email"
   },
   "user-details": {
     "name": "Name",

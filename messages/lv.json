@@ -68,7 +68,8 @@
   },
   "user-list": {
     "user-list": "Lietotāju saraksts",
-    "no-users": "Nav lietotāju, ko rādīt"
+    "no-users": "Nav lietotāju, ko rādīt",
+    "search": "Vārds, e-pasts"
   },
   "user-details": {
     "name": "Vārds",
