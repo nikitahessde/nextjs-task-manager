@@ -48,7 +48,10 @@
     "in-progress": "In progress",
     "done": "Done",
     "no-tasks": "No tasks to show",
-    "permissions": "You do not have permission to interact with tasks"
+    "permissions": "You do not have permission to interact with tasks",
+    "search": "Name, description",
+    "asc": "Asc",
+    "desc": "Desc"
   },
   "task-details": {
     "name": "Name",
@@ -69,7 +72,9 @@
   "user-list": {
     "user-list": "User list",
     "no-users": "No users to show",
-    "search": "Name, email"
+    "search": "Name, email",
+    "asc": "Asc",
+    "desc": "Desc"
   },
   "user-details": {
     "name": "Name",

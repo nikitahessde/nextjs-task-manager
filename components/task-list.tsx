@@ -1,12 +1,22 @@
 "use client";
 
-import { DeleteOutline } from "@mui/icons-material";
+import { DeleteOutline, Search } from "@mui/icons-material";
 import { useTasks } from "@/context/task-context";
 import { Tooltip } from "@mui/material";
 import { useSession } from "next-auth/react";
 import { UserRole } from "@/models/User";
 import { useSnackbar } from "@/context/snackbar-context";
 import { useTranslations } from "next-intl";
+import { useDispatch } from "react-redux";
+import { useFilteredAndSortedTasks } from "@/redux/selectors";
+import {
+  changeTaskStatus,
+  deleteTask,
+  setSearchTerm,
+  setSortOrder,
+  setTasks,
+} from "@/redux/slices/tasksSlice";
+import { useEffect } from "react";
 
 interface Task {
   uuid: string;
@@ -16,11 +26,29 @@ interface Task {
   assignedTo: string;
 }
 
-export const TaskList = () => {
+interface TaskListProps {
+  initialTasks: Task[];
+}
+
+export const TaskList = ({ initialTasks }: TaskListProps) => {
+  const dispatch = useDispatch();
   const t = useTranslations("task-list");
-  const { tasks, removeTask, changeStatus } = useTasks();
+  const tasks = useFilteredAndSortedTasks();
+  const { removeTask, changeStatus } = useTasks();
   const { showSnackbar } = useSnackbar();
   const { data: session } = useSession();
+
+  useEffect(() => {
+    dispatch(setTasks(initialTasks));
+  }, [initialTasks]);
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setSearchTerm(e.target.value));
+  };
+
+  const handleSortChange = (order: "asc" | "desc") => {
+    dispatch(setSortOrder(order));
+  };
 
   const handleStatusChange = (uuid: string, newStatus: string) => {
     if (!session?.user?.roles.includes(UserRole.Admin)) {
@@ -28,6 +56,7 @@ export const TaskList = () => {
       return;
     }
     changeStatus(uuid, newStatus);
+    dispatch(changeTaskStatus({ uuid, status: newStatus }));
   };
 
   const handleRemoveTask = (uuid: string) => {
@@ -36,13 +65,36 @@ export const TaskList = () => {
       return;
     }
     removeTask(uuid);
+    dispatch(deleteTask({ uuid }));
   };
 
   return (
     <div className="flex flex-col gap-4 overflow-y-auto rounded-lg border-2 border-primary bg-secondary p-4">
       <p className="text-xl font-semibold">{t("task-list")}</p>
+      <div className="flex justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <Search />
+          <input
+            type="text"
+            placeholder={t("search")}
+            onChange={handleSearchChange}
+            className="rounded-lg border p-2 text-sm"
+          />
+        </div>
+        <div className="flex gap-2">
+          <button onClick={() => handleSortChange("asc")} className="rounded-md border p-2 text-sm">
+            {t("asc")}
+          </button>
+          <button
+            onClick={() => handleSortChange("desc")}
+            className="rounded-md border p-2 text-sm"
+          >
+            {t("desc")}
+          </button>
+        </div>
+      </div>
       <div className="flex flex-col gap-4">
-        {tasks.length ? (
+        {tasks?.length ? (
           tasks.map((task: Task) => (
             <div
               key={task.uuid}

@@ -1,5 +1,5 @@
-import { UserRole } from '@/models/User';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { UserRole } from "@/models/User";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface User {
   email: string;
@@ -10,22 +10,21 @@ interface User {
 interface UsersState {
   users: User[];
   searchTerm: string;
-  sortOrder: 'asc' | 'desc';
+  sortOrder: "asc" | "desc";
 }
 
 const initialState: UsersState = {
   users: [],
-  searchTerm: '',
-  sortOrder: 'asc',
+  searchTerm: "",
+  sortOrder: "asc",
 };
 
 const usersSlice = createSlice({
-  name: 'users',
+  name: "users",
   initialState,
   reducers: {
     setUsers(state, action: PayloadAction<User[]>) {
-      console.log(action)
-      state.users = action.payload.map(user => ({
+      state.users = action.payload.map((user) => ({
         email: user.email,
         name: user.name,
         roles: [...user.roles],
@@ -34,7 +33,7 @@ const usersSlice = createSlice({
     setSearchTerm(state, action: PayloadAction<string>) {
       state.searchTerm = action.payload;
     },
-    setSortOrder(state, action: PayloadAction<'asc' | 'desc'>) {
+    setSortOrder(state, action: PayloadAction<"asc" | "desc">) {
       state.sortOrder = action.payload;
     },
   },
