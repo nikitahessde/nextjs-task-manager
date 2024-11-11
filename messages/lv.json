@@ -48,7 +48,10 @@
     "in-progress": "Procesā",
     "done": "Pabeigts",
     "no-tasks": "Nav uzdevumu, ko rādīt",
-    "permissions": "Jums nav atļaujas sazināties ar uzdevumiem"
+    "permissions": "Jums nav atļaujas sazināties ar uzdevumiem",
+    "search": "Nosaukums, apraksts",
+    "asc": "Aug",
+    "desc": "Dilst"
   },
   "task-details": {
     "name": "Nosaukums",
@@ -68,7 +71,10 @@
   },
   "user-list": {
     "user-list": "Lietotāju saraksts",
-    "no-users": "Nav lietotāju, ko rādīt"
+    "no-users": "Nav lietotāju, ko rādīt",
+    "search": "Vārds, e-pasts",
+    "asc": "Aug",
+    "desc": "Dilst"
   },
   "user-details": {
     "name": "Vārds",

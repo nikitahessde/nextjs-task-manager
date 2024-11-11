@@ -6,6 +6,7 @@ import { Provider } from "./provider";
 import { SnackbarProvider } from "@/context/snackbar-context";
 import { getLocale, getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
+import ReduxProvider from "./redux-provider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -24,16 +25,18 @@ export default async function RootLayout({
       <body>
         <NextIntlClientProvider messages={messages}>
           <Provider>
-            <TaskProvider>
-              <SnackbarProvider>
-                <div className="flex h-screen justify-center overflow-y-auto bg-background py-5">
-                  <div className="flex w-1/2 flex-col gap-4">
-                    <Menu />
-                    {children}
+            <ReduxProvider>
+              <TaskProvider>
+                <SnackbarProvider>
+                  <div className="flex h-screen justify-center overflow-y-auto bg-background py-5">
+                    <div className="flex w-1/2 flex-col gap-4">
+                      <Menu />
+                      {children}
+                    </div>
                   </div>
-                </div>
-              </SnackbarProvider>
-            </TaskProvider>
+                </SnackbarProvider>
+              </TaskProvider>
+            </ReduxProvider>
           </Provider>
         </NextIntlClientProvider>
       </body>

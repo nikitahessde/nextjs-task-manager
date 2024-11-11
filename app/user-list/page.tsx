@@ -4,9 +4,9 @@ import User from "@/models/User";
 
 const UserListPage = async () => {
   await dbConnect();
-  const users = await User.find().select("name email roles createdAt");
+  const users = await User.find().select("name email roles");
 
-  return <UserList users={users} />;
+  return <UserList initialUsers={users} />;
 };
 
 export default UserListPage;
