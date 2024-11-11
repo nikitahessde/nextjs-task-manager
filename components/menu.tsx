@@ -38,6 +38,9 @@ export const Menu = () => {
             <Link href={"/user-details"} className="rounded-lg bg-primary px-3 py-2">
               <p className="text-xs font-semibold text-secondary">{t("user-details")}</p>
             </Link>
+            <Link href={"/groups"} className="rounded-lg bg-primary px-3 py-2">
+              <p className="text-xs font-semibold text-secondary">{t("groups")}</p>
+            </Link>
           </>
         )}
       </div>

@@ -40,3 +40,8 @@ export const useFilteredAndSortedTasks = () => {
 
   return sortedTasks;
 };
+
+export const useGroups = () => {
+  const groups = useSelector((state: RootState) => state.groups.groups);
+  return groups;
+};

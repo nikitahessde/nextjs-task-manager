@@ -26,7 +26,8 @@
     "task-list": "Task List",
     "task-details": "Task Details",
     "user-list": "User List",
-    "user-details": "User Details"
+    "user-details": "User Details",
+    "groups": "Groups"
   },
   "create-task": {
     "new-task": "New task",
@@ -88,5 +89,20 @@
     "language": "Language",
     "english": "English",
     "latvian": "Latvian"
+  },
+  "create-group": {
+    "new-group": "New Group",
+    "group-name": "Group name",
+    "enter-group-name": "Enter group name",
+    "create-group": "Create group",
+    "group-name-required": "Group name ir required"
+  },
+  "group-details": {
+    "name": "Name",
+    "created-at": "Created at",
+    "actions": "Actions",
+    "permissions": "You do not have permission to interact with groups",
+    "empty-name": "Group name cannot be empty",
+    "no-groups": "No groups to show"
   }
 }
