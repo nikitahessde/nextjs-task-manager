@@ -74,7 +74,9 @@
     "no-users": "Nav lietotāju, ko rādīt",
     "search": "Vārds, e-pasts",
     "asc": "Aug",
-    "desc": "Dilst"
+    "desc": "Dilst",
+    "select-group": "Izvēlies grupu",
+    "assign": "Piešķirt"
   },
   "user-details": {
     "name": "Vārds",
@@ -102,6 +104,8 @@
     "actions": "Darbības",
     "permissions": "Jums nav atļaujas sazināties ar grupām",
     "empty-name": "Grupas nosaukums nevar būt tukšs",
-    "no-groups": "Nav grupu, ko rādīt"
+    "no-groups": "Nav grupu, ko rādīt",
+    "group-members": "Grupas biedri",
+    "no-members": "Nav biedru"
   }
 }

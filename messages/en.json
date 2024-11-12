@@ -75,7 +75,9 @@
     "no-users": "No users to show",
     "search": "Name, email",
     "asc": "Asc",
-    "desc": "Desc"
+    "desc": "Desc",
+    "select-group": "Select Group",
+    "assign": "Assign"
   },
   "user-details": {
     "name": "Name",
@@ -103,6 +105,8 @@
     "actions": "Actions",
     "permissions": "You do not have permission to interact with groups",
     "empty-name": "Group name cannot be empty",
-    "no-groups": "No groups to show"
+    "no-groups": "No groups to show",
+    "group-members": "Group members",
+    "no-members": "No members"
   }
 }

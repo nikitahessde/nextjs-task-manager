@@ -92,7 +92,7 @@ export const GroupDetails = ({ initialGroups, editGroup, deleteGroup }: GroupDet
             <tr className="bg-gray-200 text-sm leading-normal text-gray-600">
               <th className="px-6 py-3 text-left">{t("name")}</th>
               <th className="px-6 py-3 text-left">{t("created-at")}</th>
-              <th className="px-6 py-3 text-left">Group members</th>
+              <th className="px-6 py-3 text-left">{t("group-members")}</th>
               <th className="px-6 py-3 text-left">{t("actions")}</th>
             </tr>
           </thead>
@@ -133,7 +133,7 @@ export const GroupDetails = ({ initialGroups, editGroup, deleteGroup }: GroupDet
                         ))}
                       </div>
                     ) : (
-                      <span>No members</span>
+                      <span>{t("no-members")}</span>
                     )}
                   </td>
                   <td className="px-6 py-3 text-left">

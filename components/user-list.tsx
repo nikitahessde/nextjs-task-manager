@@ -101,7 +101,7 @@ export const UserList = ({ initialUsers, groups, assignUserToGroup }: UserListPr
                     className="rounded-lg border py-2 px-3 text-sm"
                   >
                     <option value="" disabled>
-                      Select Group
+                      {t("select-group")}
                     </option>
                     {groups.map((group) => (
                       <option
@@ -118,7 +118,7 @@ export const UserList = ({ initialUsers, groups, assignUserToGroup }: UserListPr
                     disabled={!selectedGroups[user.email]}
                     className={`rounded-lg border bg-primary p-2 text-xs text-white ${!selectedGroups[user.email] && "opacity-50"}`}
                   >
-                    Assign
+                    {t("assign")}
                   </button>
                 </div>
               )}
