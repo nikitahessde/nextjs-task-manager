@@ -40,7 +40,9 @@
     "assignee": "Izpildītājs",
     "assign-to": "Piešķirt...",
     "add-task": "Pievienot uzdevumu",
-    "permissions": "Jums nav atļaujas pievienot uzdevumus"
+    "permissions": "Jums nav atļaujas pievienot uzdevumus",
+    "assign-to-group": "Piešķirt grupai",
+    "select-group": "Izvēlies grupu..."
   },
   "task-list": {
     "task-list": "Uzdevumu saraksts",
@@ -67,7 +69,8 @@
     "edit": "Rediģēt",
     "permissions": "Jums nav atļaujas rediģēt uzdevumus",
     "empty-name": "Uzdevuma nosaukums nevar būt tukšs",
-    "no-tasks": "Nav uzdevumu, ko rādīt"
+    "no-tasks": "Nav uzdevumu, ko rādīt",
+    "assigned-group": "Piešķirtā grupa"
   },
   "user-list": {
     "user-list": "Lietotāju saraksts",

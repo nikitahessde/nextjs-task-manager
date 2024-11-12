@@ -98,7 +98,7 @@ export const UserList = ({ initialUsers, groups, assignUserToGroup }: UserListPr
                       setSelectedGroups((prev) => ({ ...prev, [user.email]: e.target.value }))
                     }
                     value={selectedGroups[user.email] || ""}
-                    className="rounded-lg border py-2 px-3 text-sm"
+                    className="rounded-lg border px-3 py-2 text-sm"
                   >
                     <option value="" disabled>
                       {t("select-group")}

@@ -16,6 +16,7 @@ interface Task {
   status: string;
   createdAt: Date;
   assignedTo: string;
+  assignedGroup: string;
 }
 
 interface User {
@@ -23,7 +24,14 @@ interface User {
   name: string;
 }
 
-export const TaskDetails = () => {
+interface Group {
+  uuid: string;
+  name: string;
+  createdAt: Date;
+  users?: string[];
+}
+
+export const TaskDetails = ({ groups }: { groups: Group[] }) => {
   const t = useTranslations("task-details");
   const { tasks, updateTask } = useTasks();
   const { data: session } = useSession();
@@ -34,6 +42,7 @@ export const TaskDetails = () => {
     description: "",
     status: "",
     assignedTo: "",
+    assignedGroup: ""
   });
   const [nameError, setNameError] = useState("");
   const [users, setUsers] = useState<User[]>([]);
@@ -61,6 +70,7 @@ export const TaskDetails = () => {
       description: task.description,
       status: task.status,
       assignedTo: task.assignedTo,
+      assignedGroup: task.assignedGroup,
     });
     setNameError("");
   };
@@ -75,6 +85,7 @@ export const TaskDetails = () => {
       description: editedTask.description,
       status: editedTask.status,
       assignedTo: editedTask.assignedTo,
+      assignedGroup: editedTask.assignedGroup
     });
     setEditingTaskId(undefined);
     setNameError("");
@@ -91,6 +102,7 @@ export const TaskDetails = () => {
               <th className="px-6 py-3 text-left">{t("status")}</th>
               <th className="px-6 py-3 text-left">{t("created-at")}</th>
               <th className="px-6 py-3 text-left">{t("assigned-to")}</th>
+              <th className="px-6 py-3 text-left">{t("assigned-group")}</th>
               <th className="px-6 py-3 text-left">{t("actions")}</th>
             </tr>
           </thead>
@@ -168,6 +180,25 @@ export const TaskDetails = () => {
                       </select>
                     ) : (
                       task.assignedTo
+                    )}
+                  </td>
+                  <td className="px-6 py-3 text-left">
+                    {editingTaskId === task.uuid ? (
+                      <select
+                        value={editedTask.assignedGroup}
+                        onChange={(e) =>
+                          setEditedTask({ ...editedTask, assignedGroup: e.target.value })
+                        }
+                        className="rounded border p-2"
+                      >
+                        {groups.map((group) => (
+                          <option key={group.uuid} value={group.uuid}>
+                            {group.name}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      groups.find(group => group.uuid === task.assignedGroup)?.name || "No group assigned"
                     )}
                   </td>
                   <td className="px-6 py-3 text-left">

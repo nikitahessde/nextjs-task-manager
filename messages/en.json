@@ -41,7 +41,9 @@
     "assignee": "Assignee",
     "assign-to": "Assign to...",
     "add-task": "Add Task",
-    "permissions": "You do not have permission to add tasks"
+    "permissions": "You do not have permission to add tasks",
+    "assign-to-group": "Assign to Group",
+    "select-group": "Select Group..."
   },
   "task-list": {
     "task-list": "Task list",
@@ -68,7 +70,8 @@
     "edit": "Edit",
     "permissions": "You do not have permission to edit tasks",
     "empty-name": "Task name cannot be empty",
-    "no-tasks": "No tasks to show"
+    "no-tasks": "No tasks to show",
+    "assigned-group": "Assigned group"
   },
   "user-list": {
     "user-list": "User list",
