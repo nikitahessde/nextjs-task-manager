@@ -10,13 +10,14 @@ interface Group {
   uuid: string;
   name: string;
   createdAt: Date;
+  users?: string[];
 }
 
 const GroupsPage = async () => {
   await dbConnect();
-  const groups = await Group.find().select("uuid name createdAt");
+  const groups = await Group.find().select("uuid name users createdAt");
 
-  const editGroup = async (uuid: string, updates: Partial<{ name: string }>) => {
+  const editGroup = async (uuid: string, updates: Partial<{ name: string; users: string[] }>) => {
     "use server";
     const session = await getServerSession(authOptions);
     if (!session || !session.user.roles.includes(UserRole.Admin)) {

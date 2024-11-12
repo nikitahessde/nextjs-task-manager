@@ -13,16 +13,18 @@ import { setGroups } from "@/redux/slices/groupsSlice";
 import { useGroups } from "@/redux/selectors";
 import { editGroup as editReduxGroup } from "@/redux/slices/groupsSlice";
 import { deleteGroup as deleteReduxGroup } from "@/redux/slices/groupsSlice";
+import Close from "@mui/icons-material/Close";
 
 interface Group {
   uuid: string;
   name: string;
   createdAt: Date;
+  users?: string[];
 }
 
 interface GroupDetailsProps {
   initialGroups: Group[];
-  editGroup: (uuid: string, updates: Partial<{ name: string }>) => Promise<void>;
+  editGroup: (uuid: string, updates: Partial<{ name: string; users: string[] }>) => Promise<void>;
   deleteGroup: (uuid: string) => Promise<void>;
 }
 
@@ -72,6 +74,16 @@ export const GroupDetails = ({ initialGroups, editGroup, deleteGroup }: GroupDet
     dispatch(deleteReduxGroup({ uuid }));
   };
 
+  const handleRemoveUser = async (groupId: string, userEmail: string) => {
+    const updatedUsers =
+      groups
+        .find((group) => group.uuid === groupId)
+        ?.users?.filter((email) => email !== userEmail) || [];
+    await editGroup(groupId, { users: updatedUsers });
+    dispatch(editReduxGroup({ uuid: groupId, updates: { users: updatedUsers } }));
+    showSnackbar(`User ${userEmail} removed from group`);
+  };
+
   return (
     <div className="flex flex-col gap-4 rounded-lg border-2 border-primary bg-secondary p-4">
       <div className="w-full overflow-x-auto rounded-lg">
@@ -80,6 +92,7 @@ export const GroupDetails = ({ initialGroups, editGroup, deleteGroup }: GroupDet
             <tr className="bg-gray-200 text-sm leading-normal text-gray-600">
               <th className="px-6 py-3 text-left">{t("name")}</th>
               <th className="px-6 py-3 text-left">{t("created-at")}</th>
+              <th className="px-6 py-3 text-left">Group members</th>
               <th className="px-6 py-3 text-left">{t("actions")}</th>
             </tr>
           </thead>
@@ -107,6 +120,23 @@ export const GroupDetails = ({ initialGroups, editGroup, deleteGroup }: GroupDet
                     {new Date(group.createdAt).toDateString()}
                   </td>
                   <td className="px-6 py-3 text-left">
+                    {group.users && group.users.length > 0 ? (
+                      <div>
+                        {group.users.map((userEmail) => (
+                          <div key={userEmail} className="flex items-center gap-2 py-1">
+                            <span>{userEmail}</span>
+                            <Close
+                              className="cursor-pointer"
+                              onClick={() => handleRemoveUser(group.uuid, userEmail)}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <span>No members</span>
+                    )}
+                  </td>
+                  <td className="px-6 py-3 text-left">
                     {editingGroupId === group.uuid ? (
                       <Check onClick={() => handleSave(group)} className="cursor-pointer">
                         {t("save")}
@@ -130,7 +160,7 @@ export const GroupDetails = ({ initialGroups, editGroup, deleteGroup }: GroupDet
               ))
             ) : (
               <tr>
-                <td colSpan={3} className="px-6 py-3 text-center text-base text-primary">
+                <td colSpan={4} className="px-6 py-3 text-center text-base text-primary">
                   {t("no-groups")}
                 </td>
               </tr>
