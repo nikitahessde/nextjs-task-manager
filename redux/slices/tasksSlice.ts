@@ -33,6 +33,9 @@ const tasksSlice = createSlice({
         assignedTo: task.assignedTo,
       }));
     },
+    resetTasks(state) {
+      state.tasks = [];
+    },
     setSearchTerm(state, action: PayloadAction<string>) {
       state.searchTerm = action.payload;
     },
@@ -51,6 +54,6 @@ const tasksSlice = createSlice({
   },
 });
 
-export const { setTasks, setSearchTerm, setSortOrder, changeTaskStatus, deleteTask } =
+export const { setTasks, resetTasks, setSearchTerm, setSortOrder, changeTaskStatus, deleteTask } =
   tasksSlice.actions;
 export default tasksSlice.reducer;

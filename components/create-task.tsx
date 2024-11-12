@@ -27,7 +27,7 @@ interface Group {
 
 export const AddNewTask = ({ initialGroups }: { initialGroups: Group[] }) => {
   const t = useTranslations("create-task");
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
   const groups = useGroups();

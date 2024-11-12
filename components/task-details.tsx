@@ -42,7 +42,7 @@ export const TaskDetails = ({ groups }: { groups: Group[] }) => {
     description: "",
     status: "",
     assignedTo: "",
-    assignedGroup: ""
+    assignedGroup: "",
   });
   const [nameError, setNameError] = useState("");
   const [users, setUsers] = useState<User[]>([]);
@@ -85,7 +85,7 @@ export const TaskDetails = ({ groups }: { groups: Group[] }) => {
       description: editedTask.description,
       status: editedTask.status,
       assignedTo: editedTask.assignedTo,
-      assignedGroup: editedTask.assignedGroup
+      assignedGroup: editedTask.assignedGroup,
     });
     setEditingTaskId(undefined);
     setNameError("");
@@ -198,7 +198,8 @@ export const TaskDetails = ({ groups }: { groups: Group[] }) => {
                         ))}
                       </select>
                     ) : (
-                      groups.find(group => group.uuid === task.assignedGroup)?.name || "No group assigned"
+                      groups.find((group) => group.uuid === task.assignedGroup)?.name ||
+                      "No group assigned"
                     )}
                   </td>
                   <td className="px-6 py-3 text-left">

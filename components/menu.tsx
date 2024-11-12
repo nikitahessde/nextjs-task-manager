@@ -7,11 +7,14 @@ import Logout from "@mui/icons-material/Logout";
 import { UserRole } from "@/models/User";
 import { PersonOutline } from "@mui/icons-material";
 import { useTranslations } from "next-intl";
+import { resetTasks } from "@/redux/slices/tasksSlice";
+import { useDispatch } from "react-redux";
 
 export const Menu = () => {
   const t = useTranslations("menu");
   const session = useSession();
   const router = useRouter();
+  const dispatch = useDispatch();
 
   if (session.status !== "authenticated") return null;
 
@@ -50,6 +53,7 @@ export const Menu = () => {
           className="cursor-pointer"
           onClick={() => {
             signOut({ redirect: false }).then(() => {
+              dispatch(resetTasks());
               router.push("/login");
             });
           }}

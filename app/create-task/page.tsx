@@ -5,8 +5,8 @@ import dbConnect from "@/utils/mongodb";
 
 const AddNewTaskPage = async () => {
   await dbConnect();
-  const groups = await Group.find().select("uuid name users createdAt");
-  return <AddNewTask initialGroups={groups}/>;
+  const groups = await Group.find().select("uuid name users");
+  return <AddNewTask initialGroups={groups} />;
 };
 
 export default AddNewTaskPage;

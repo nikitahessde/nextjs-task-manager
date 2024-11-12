@@ -81,7 +81,6 @@ export const GroupDetails = ({ initialGroups, editGroup, deleteGroup }: GroupDet
         ?.users?.filter((email) => email !== userEmail) || [];
     await editGroup(groupId, { users: updatedUsers });
     dispatch(editReduxGroup({ uuid: groupId, updates: { users: updatedUsers } }));
-    showSnackbar(`User ${userEmail} removed from group`);
   };
 
   return (
@@ -138,17 +137,13 @@ export const GroupDetails = ({ initialGroups, editGroup, deleteGroup }: GroupDet
                   </td>
                   <td className="px-6 py-3 text-left">
                     {editingGroupId === group.uuid ? (
-                      <Check onClick={() => handleSave(group)} className="cursor-pointer">
-                        {t("save")}
-                      </Check>
+                      <Check onClick={() => handleSave(group)} className="cursor-pointer"></Check>
                     ) : (
                       <div className="flex gap-2">
                         <ModeEdit
                           onClick={() => group.uuid && handleEdit(group)}
                           className="cursor-pointer"
-                        >
-                          {t("edit")}
-                        </ModeEdit>
+                        ></ModeEdit>
                         <DeleteOutline
                           className={"cursor-pointer"}
                           onClick={() => handleGroupDelete(group.uuid)}

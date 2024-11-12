@@ -100,7 +100,8 @@
     "group-name": "Group name",
     "enter-group-name": "Enter group name",
     "create-group": "Create group",
-    "group-name-required": "Group name ir required"
+    "group-name-required": "Group name ir required",
+    "max-length": "Max length is"
   },
   "group-details": {
     "name": "Name",

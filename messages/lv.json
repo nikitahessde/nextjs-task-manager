@@ -99,7 +99,8 @@
     "group-name": "Grupas nosaukums",
     "enter-group-name": "Ievadiet grupas nosaukumu",
     "create-group": "Izveidot grupu",
-    "group-name-required": "Grupas nosaukums ir obligāts"
+    "group-name-required": "Grupas nosaukums ir obligāts",
+    "max-length": "Maksimālais garums ir"
   },
   "group-details": {
     "name": "Nosaukums",
