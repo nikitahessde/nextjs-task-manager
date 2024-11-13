@@ -4,7 +4,7 @@ import Group from "@/models/Group";
 
 const TaskDetailsPage = async () => {
   await dbConnect();
-  const groups = await Group.find().select("uuid name users createdAt");
+  const groups = await Group.find().select("uuid name users");
   return <TaskDetails groups={groups} />;
 };
 

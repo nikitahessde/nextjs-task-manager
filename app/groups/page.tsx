@@ -14,7 +14,7 @@ interface Group {
 
 const GroupsPage = async () => {
   await dbConnect();
-  const groups = await Group.find().select("uuid name users createdAt");
+  const groups = await Group.find().select("uuid name users");
 
   const editGroup = async (uuid: string, updates: Partial<{ name: string; users: string[] }>) => {
     "use server";
