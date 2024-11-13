@@ -36,7 +36,7 @@ export const AddNewTask = ({ initialGroups }: { initialGroups: Group[] }) => {
 
   useEffect(() => {
     dispatch(setGroups(initialGroups));
-  }, [initialGroups]);
+  }, [initialGroups, dispatch]);
 
   useEffect(() => {
     const fetchUsers = async () => {

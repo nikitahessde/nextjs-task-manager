@@ -24,23 +24,20 @@ interface Task {
   description: string;
   status: string;
   assignedTo: string;
+  assignedGroup: string;
 }
 
-interface TaskListProps {
-  initialTasks: Task[];
-}
-
-export const TaskList = ({ initialTasks }: TaskListProps) => {
+export const TaskList = () => {
   const dispatch = useDispatch();
   const t = useTranslations("task-list");
   const tasks = useFilteredAndSortedTasks();
-  const { removeTask, changeStatus } = useTasks();
+  const { tasks: initialTasks, removeTask, changeStatus } = useTasks();
   const { showSnackbar } = useSnackbar();
   const { data: session } = useSession();
 
   useEffect(() => {
     dispatch(setTasks(initialTasks));
-  }, [initialTasks]);
+  }, [initialTasks, dispatch]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setSearchTerm(e.target.value));

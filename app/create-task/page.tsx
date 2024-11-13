@@ -1,6 +1,5 @@
 import AddNewTask from "@/components/create-task";
 import Group from "@/models/Group";
-import User from "@/models/User";
 import dbConnect from "@/utils/mongodb";
 
 const AddNewTaskPage = async () => {

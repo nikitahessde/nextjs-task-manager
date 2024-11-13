@@ -6,6 +6,7 @@ interface Task {
   description: string;
   status: string;
   assignedTo: string;
+  assignedGroup: string;
 }
 
 interface TaskState {
@@ -31,6 +32,7 @@ const tasksSlice = createSlice({
         description: task.description,
         status: task.status,
         assignedTo: task.assignedTo,
+        assignedGroup: task.assignedGroup,
       }));
     },
     resetTasks(state) {

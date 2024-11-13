@@ -41,7 +41,7 @@ export const GroupDetails = ({ initialGroups, editGroup, deleteGroup }: GroupDet
 
   useEffect(() => {
     dispatch(setGroups(initialGroups));
-  }, [initialGroups]);
+  }, [initialGroups, dispatch]);
 
   const handleEdit = (group: Group) => {
     if (!session?.user?.roles.includes(UserRole.Admin)) {

@@ -22,7 +22,7 @@ const groupsSlice = createSlice({
       state.groups = action.payload?.map((group) => ({
         uuid: group.uuid,
         name: group.name,
-        users: group.users
+        users: group.users,
       }));
     },
     addGroup(state, action: PayloadAction<Group>) {
