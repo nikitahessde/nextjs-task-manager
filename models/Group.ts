@@ -4,7 +4,6 @@ const groupSchema = new mongoose.Schema(
   {
     uuid: { type: String, required: true },
     name: { type: String, required: true },
-    createdAt: { type: Date, default: Date.now },
     users: { type: [String], default: [] },
   },
   { collection: "group" },

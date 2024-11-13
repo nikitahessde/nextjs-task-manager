@@ -9,7 +9,6 @@ import GroupDetails from "@/components/group-details";
 interface Group {
   uuid: string;
   name: string;
-  createdAt: Date;
   users?: string[];
 }
 

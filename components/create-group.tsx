@@ -11,7 +11,6 @@ import { addGroup as addReduxGroup } from "@/redux/slices/groupsSlice";
 interface Group {
   uuid: string;
   name: string;
-  createdAt: Date;
   users?: string[];
 }
 
@@ -44,7 +43,6 @@ export const CreateGroup = ({ addGroup }: CreateGroupProps) => {
     const newGroup = {
       uuid: crypto.randomUUID(),
       name: data.groupName,
-      createdAt: new Date(),
     };
     addGroup(newGroup);
     dispatch(addReduxGroup(newGroup));

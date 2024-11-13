@@ -18,7 +18,6 @@ import Close from "@mui/icons-material/Close";
 interface Group {
   uuid: string;
   name: string;
-  createdAt: Date;
   users?: string[];
 }
 
@@ -90,7 +89,6 @@ export const GroupDetails = ({ initialGroups, editGroup, deleteGroup }: GroupDet
           <thead>
             <tr className="bg-gray-200 text-sm leading-normal text-gray-600">
               <th className="px-6 py-3 text-left">{t("name")}</th>
-              <th className="px-6 py-3 text-left">{t("created-at")}</th>
               <th className="px-6 py-3 text-left">{t("group-members")}</th>
               <th className="px-6 py-3 text-left">{t("actions")}</th>
             </tr>
@@ -114,9 +112,6 @@ export const GroupDetails = ({ initialGroups, editGroup, deleteGroup }: GroupDet
                     ) : (
                       group.name
                     )}
-                  </td>
-                  <td className="px-6 py-3 text-left">
-                    {new Date(group.createdAt).toDateString()}
                   </td>
                   <td className="px-6 py-3 text-left">
                     {group.users && group.users.length > 0 ? (

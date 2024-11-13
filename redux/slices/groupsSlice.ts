@@ -3,7 +3,6 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface Group {
   uuid: string;
   name: string;
-  createdAt: Date;
   users?: string[];
 }
 
@@ -20,7 +19,11 @@ const groupsSlice = createSlice({
   initialState,
   reducers: {
     setGroups(state, action: PayloadAction<Group[]>) {
-      state.groups = action.payload;
+      state.groups = action.payload?.map((group) => ({
+        uuid: group.uuid,
+        name: group.name,
+        users: group.users
+      }));
     },
     addGroup(state, action: PayloadAction<Group>) {
       state.groups.push(action.payload);

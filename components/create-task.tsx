@@ -21,7 +21,6 @@ interface User {
 interface Group {
   uuid: string;
   name: string;
-  createdAt: Date;
   users?: string[];
 }
 
