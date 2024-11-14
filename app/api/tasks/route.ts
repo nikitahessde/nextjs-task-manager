@@ -30,9 +30,9 @@ export async function GET() {
     const userGroups = await Group.find({ users: session?.user.email }).select("uuid");
     const userGroupIds = userGroups.map((group) => group.uuid);
     const developerTasks = await Task.find({ assignedGroup: { $in: userGroupIds } }).select(
-      "uuid name description status assignedTo assignedGroup",
+      "uuid name description status assignedTo assignedGroup -_id",
     );
-    const allTasks = await Task.find().select("uuid name description status assignedTo");
+    const allTasks = await Task.find().select("uuid name description status assignedTo assignedGroup -_id");
     const tasks = session?.user.roles.includes(UserRole.Developer) ? developerTasks : allTasks;
     return NextResponse.json(tasks);
   } catch (error) {
