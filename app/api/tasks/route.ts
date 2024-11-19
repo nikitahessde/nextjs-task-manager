@@ -3,11 +3,12 @@ import Task from "../../../models/Task";
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { UserRole } from "@/models/User";
+import Group from "@/models/Group";
+import { isAdmin, isDeveloper } from "@/utils/auth";
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
-  if (!session || !session.user.roles.includes(UserRole.Admin)) {
+  if (!session || !isAdmin(session)) {
     return NextResponse.json({ message: "Permission denied" }, { status: 403 });
   }
   await dbConnect();
@@ -23,9 +24,18 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET() {
+  const session = await getServerSession(authOptions);
   await dbConnect();
   try {
-    const tasks = await Task.find();
+    const userGroups = await Group.find({ users: session?.user.email }).select("uuid");
+    const userGroupIds = userGroups.map((group) => group.uuid);
+    const developerTasks = await Task.find({ assignedGroup: { $in: userGroupIds } }).select(
+      "uuid name description status assignedTo assignedGroup -_id",
+    );
+    const allTasks = await Task.find().select(
+      "uuid name description status assignedTo assignedGroup -_id",
+    );
+    const tasks = isDeveloper(session) ? developerTasks : allTasks;
     return NextResponse.json(tasks);
   } catch (error) {
     console.error("Error fetching tasks:", error);

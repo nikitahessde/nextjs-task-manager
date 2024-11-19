@@ -40,7 +40,9 @@
     "assignee": "Izpildītājs",
     "assign-to": "Piešķirt...",
     "add-task": "Pievienot uzdevumu",
-    "permissions": "Jums nav atļaujas pievienot uzdevumus"
+    "permissions": "Jums nav atļaujas pievienot uzdevumus",
+    "assign-to-group": "Piešķirt grupai",
+    "select-group": "Izvēlies grupu..."
   },
   "task-list": {
     "task-list": "Uzdevumu saraksts",
@@ -67,14 +69,17 @@
     "edit": "Rediģēt",
     "permissions": "Jums nav atļaujas rediģēt uzdevumus",
     "empty-name": "Uzdevuma nosaukums nevar būt tukšs",
-    "no-tasks": "Nav uzdevumu, ko rādīt"
+    "no-tasks": "Nav uzdevumu, ko rādīt",
+    "assigned-group": "Piešķirtā grupa"
   },
   "user-list": {
     "user-list": "Lietotāju saraksts",
     "no-users": "Nav lietotāju, ko rādīt",
     "search": "Vārds, e-pasts",
     "asc": "Aug",
-    "desc": "Dilst"
+    "desc": "Dilst",
+    "select-group": "Izvēlies grupu",
+    "assign": "Piešķirt"
   },
   "user-details": {
     "name": "Vārds",
@@ -88,5 +93,23 @@
     "language": "Valoda",
     "english": "Angļu",
     "latvian": "Latviešu"
+  },
+  "create-group": {
+    "new-group": "Jauna grupa",
+    "group-name": "Grupas nosaukums",
+    "enter-group-name": "Ievadiet grupas nosaukumu",
+    "create-group": "Izveidot grupu",
+    "group-name-required": "Grupas nosaukums ir obligāts",
+    "max-length": "Maksimālais garums ir"
+  },
+  "group-details": {
+    "name": "Nosaukums",
+    "created-at": "Izveidots",
+    "actions": "Darbības",
+    "permissions": "Jums nav atļaujas sazināties ar grupām",
+    "empty-name": "Grupas nosaukums nevar būt tukšs",
+    "no-groups": "Nav grupu, ko rādīt",
+    "group-members": "Grupas biedri",
+    "no-members": "Nav biedru"
   }
 }

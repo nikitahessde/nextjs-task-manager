@@ -8,6 +8,7 @@ const taskSchema = new mongoose.Schema(
     status: { type: String, default: "todo" },
     createdAt: { type: Date, default: Date.now },
     assignedTo: { type: String, required: false },
+    assignedGroup: { type: String, required: false },
   },
   { collection: "task" },
 );

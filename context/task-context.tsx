@@ -10,6 +10,7 @@ interface Task {
   status: string;
   createdAt: Date;
   assignedTo: string;
+  assignedGroup: string;
 }
 
 const TaskContext = createContext<{

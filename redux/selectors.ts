@@ -26,8 +26,8 @@ export const useFilteredAndSortedTasks = () => {
 
   const filteredTasks = tasks?.filter(
     (task) =>
-      task.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      task.description.toLowerCase().includes(searchTerm.toLowerCase()),
+      task.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      task.description?.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const sortedTasks = filteredTasks?.sort((a, b) => {
@@ -39,4 +39,9 @@ export const useFilteredAndSortedTasks = () => {
   });
 
   return sortedTasks;
+};
+
+export const useGroups = () => {
+  const groups = useSelector((state: RootState) => state.groups.groups);
+  return groups;
 };

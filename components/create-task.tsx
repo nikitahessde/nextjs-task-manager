@@ -8,6 +8,10 @@ import { useSession } from "next-auth/react";
 import { UserRole } from "@/models/User";
 import { useSnackbar } from "@/context/snackbar-context";
 import { useTranslations } from "next-intl";
+import { useGroups } from "@/redux/selectors";
+import { setGroups } from "@/redux/slices/groupsSlice";
+import { useDispatch } from "react-redux";
+import { isAdmin } from "@/utils/auth";
 
 interface User {
   email: string;
@@ -15,13 +19,25 @@ interface User {
   roles: UserRole[];
 }
 
-export const AddNewTask = () => {
+interface Group {
+  uuid: string;
+  name: string;
+  users?: string[];
+}
+
+export const AddNewTask = ({ initialGroups }: { initialGroups: Group[] }) => {
   const t = useTranslations("create-task");
+  const dispatch = useDispatch();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
+  const groups = useGroups();
   const { addTask } = useTasks();
   const { showSnackbar } = useSnackbar();
   const { data: session } = useSession();
+
+  useEffect(() => {
+    dispatch(setGroups(initialGroups));
+  }, [initialGroups, dispatch]);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -42,11 +58,17 @@ export const AddNewTask = () => {
       taskName: "",
       taskDescription: "",
       assignedTo: "",
+      assignedGroup: "",
     },
   });
 
-  const onSubmit = (data: { taskName: string; taskDescription: string; assignedTo: string }) => {
-    if (!session?.user?.roles.includes(UserRole.Admin)) {
+  const onSubmit = (data: {
+    taskName: string;
+    taskDescription: string;
+    assignedTo: string;
+    assignedGroup: string;
+  }) => {
+    if (!isAdmin(session)) {
       showSnackbar(t("permissions"));
       return;
     }
@@ -57,6 +79,7 @@ export const AddNewTask = () => {
       status: "todo",
       createdAt: new Date(),
       assignedTo: data.assignedTo,
+      assignedGroup: data.assignedGroup,
     };
     addTask(newTask);
     reset();
@@ -135,6 +158,23 @@ export const AddNewTask = () => {
           {errors.assignedTo && (
             <div className="text-xs text-red-500">{errors.assignedTo.message}</div>
           )}
+        </div>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="assignTo" className="block text-sm font-medium text-primary">
+            {t("assign-to-group")}
+          </label>
+          <select
+            id="assignTo"
+            {...register("assignedGroup")}
+            className="w-full rounded-lg border border-gray-400 p-2 text-sm"
+          >
+            <option value="">{t("select-group")}</option>
+            {groups.map((group) => (
+              <option key={group.uuid} value={group.uuid}>
+                {group.name}
+              </option>
+            ))}
+          </select>
         </div>
         <button
           type="submit"

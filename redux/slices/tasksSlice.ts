@@ -6,6 +6,7 @@ interface Task {
   description: string;
   status: string;
   assignedTo: string;
+  assignedGroup: string;
 }
 
 interface TaskState {
@@ -31,7 +32,11 @@ const tasksSlice = createSlice({
         description: task.description,
         status: task.status,
         assignedTo: task.assignedTo,
+        assignedGroup: task.assignedGroup,
       }));
+    },
+    resetTasks(state) {
+      state.tasks = [];
     },
     setSearchTerm(state, action: PayloadAction<string>) {
       state.searchTerm = action.payload;
@@ -51,6 +56,6 @@ const tasksSlice = createSlice({
   },
 });
 
-export const { setTasks, setSearchTerm, setSortOrder, changeTaskStatus, deleteTask } =
+export const { setTasks, resetTasks, setSearchTerm, setSortOrder, changeTaskStatus, deleteTask } =
   tasksSlice.actions;
 export default tasksSlice.reducer;

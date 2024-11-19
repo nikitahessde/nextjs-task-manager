@@ -4,7 +4,6 @@ import { DeleteOutline, Search } from "@mui/icons-material";
 import { useTasks } from "@/context/task-context";
 import { Tooltip } from "@mui/material";
 import { useSession } from "next-auth/react";
-import { UserRole } from "@/models/User";
 import { useSnackbar } from "@/context/snackbar-context";
 import { useTranslations } from "next-intl";
 import { useDispatch } from "react-redux";
@@ -17,6 +16,7 @@ import {
   setTasks,
 } from "@/redux/slices/tasksSlice";
 import { useEffect } from "react";
+import { isAdmin } from "@/utils/auth";
 
 interface Task {
   uuid: string;
@@ -24,23 +24,20 @@ interface Task {
   description: string;
   status: string;
   assignedTo: string;
+  assignedGroup: string;
 }
 
-interface TaskListProps {
-  initialTasks: Task[];
-}
-
-export const TaskList = ({ initialTasks }: TaskListProps) => {
+export const TaskList = () => {
   const dispatch = useDispatch();
   const t = useTranslations("task-list");
   const tasks = useFilteredAndSortedTasks();
-  const { removeTask, changeStatus } = useTasks();
+  const { tasks: initialTasks, removeTask, changeStatus } = useTasks();
   const { showSnackbar } = useSnackbar();
   const { data: session } = useSession();
 
   useEffect(() => {
     dispatch(setTasks(initialTasks));
-  }, [initialTasks]);
+  }, [initialTasks, dispatch]);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(setSearchTerm(e.target.value));
@@ -51,7 +48,7 @@ export const TaskList = ({ initialTasks }: TaskListProps) => {
   };
 
   const handleStatusChange = (uuid: string, newStatus: string) => {
-    if (!session?.user?.roles.includes(UserRole.Admin)) {
+    if (!isAdmin(session)) {
       showSnackbar("You do not have permission to interact with tasks");
       return;
     }
@@ -60,7 +57,7 @@ export const TaskList = ({ initialTasks }: TaskListProps) => {
   };
 
   const handleRemoveTask = (uuid: string) => {
-    if (!session?.user?.roles.includes(UserRole.Admin)) {
+    if (!isAdmin(session)) {
       showSnackbar("You do not have permission to interact with tasks");
       return;
     }

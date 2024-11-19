@@ -29,7 +29,7 @@ export default async function RootLayout({
               <TaskProvider>
                 <SnackbarProvider>
                   <div className="flex h-screen justify-center overflow-y-auto bg-background py-5">
-                    <div className="flex w-1/2 flex-col gap-4">
+                    <div className="flex w-2/3 flex-col gap-4">
                       <Menu />
                       {children}
                     </div>
