@@ -4,7 +4,6 @@ import { DeleteOutline, Search } from "@mui/icons-material";
 import { useTasks } from "@/context/task-context";
 import { Tooltip } from "@mui/material";
 import { useSession } from "next-auth/react";
-import { UserRole } from "@/models/User";
 import { useSnackbar } from "@/context/snackbar-context";
 import { useTranslations } from "next-intl";
 import { useDispatch } from "react-redux";
@@ -17,6 +16,7 @@ import {
   setTasks,
 } from "@/redux/slices/tasksSlice";
 import { useEffect } from "react";
+import { isAdmin } from "@/utils/auth";
 
 interface Task {
   uuid: string;
@@ -48,7 +48,7 @@ export const TaskList = () => {
   };
 
   const handleStatusChange = (uuid: string, newStatus: string) => {
-    if (!session?.user?.roles.includes(UserRole.Admin)) {
+    if (!isAdmin(session)) {
       showSnackbar("You do not have permission to interact with tasks");
       return;
     }
@@ -57,7 +57,7 @@ export const TaskList = () => {
   };
 
   const handleRemoveTask = (uuid: string) => {
-    if (!session?.user?.roles.includes(UserRole.Admin)) {
+    if (!isAdmin(session)) {
       showSnackbar("You do not have permission to interact with tasks");
       return;
     }

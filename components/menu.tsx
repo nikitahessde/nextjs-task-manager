@@ -4,11 +4,11 @@ import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Logout from "@mui/icons-material/Logout";
-import { UserRole } from "@/models/User";
 import { PersonOutline } from "@mui/icons-material";
 import { useTranslations } from "next-intl";
 import { resetTasks } from "@/redux/slices/tasksSlice";
 import { useDispatch } from "react-redux";
+import { isAdmin } from "@/utils/auth";
 
 export const Menu = () => {
   const t = useTranslations("menu");
@@ -33,7 +33,7 @@ export const Menu = () => {
         <Link href={"/task-details"} className="rounded-lg bg-primary px-3 py-2">
           <p className="text-xs font-semibold text-secondary">{t("task-details")}</p>
         </Link>
-        {session.data.user.roles.includes(UserRole.Admin) && (
+        {isAdmin(session.data) && (
           <>
             <Link href={"/user-list"} className="rounded-lg bg-primary px-3 py-2">
               <p className="text-xs font-semibold text-secondary">{t("user-list")}</p>

@@ -26,8 +26,8 @@ export const useFilteredAndSortedTasks = () => {
 
   const filteredTasks = tasks?.filter(
     (task) =>
-      task.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      task.description.toLowerCase().includes(searchTerm.toLowerCase()),
+      task.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      task.description?.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const sortedTasks = filteredTasks?.sort((a, b) => {

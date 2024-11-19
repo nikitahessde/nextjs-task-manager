@@ -2,11 +2,11 @@
 
 import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
-import { UserRole } from "@/models/User";
 import { useSnackbar } from "@/context/snackbar-context";
 import { useTranslations } from "next-intl";
 import { useDispatch } from "react-redux";
 import { addGroup as addReduxGroup } from "@/redux/slices/groupsSlice";
+import { isAdmin } from "@/utils/auth";
 
 interface Group {
   uuid: string;
@@ -36,17 +36,21 @@ export const CreateGroup = ({ addGroup }: CreateGroupProps) => {
   });
 
   const onSubmit = (data: { groupName: string }) => {
-    if (!session?.user?.roles.includes(UserRole.Admin)) {
-      showSnackbar(t("permissions"));
-      return;
+    try {
+      if (!isAdmin(session)) {
+        showSnackbar(t("permissions"));
+        return;
+      }
+      const newGroup = {
+        uuid: crypto.randomUUID(),
+        name: data.groupName,
+      };
+      addGroup(newGroup);
+      dispatch(addReduxGroup(newGroup));
+      reset();
+    } catch (error) {
+      console.error(error);
     }
-    const newGroup = {
-      uuid: crypto.randomUUID(),
-      name: data.groupName,
-    };
-    addGroup(newGroup);
-    dispatch(addReduxGroup(newGroup));
-    reset();
   };
 
   return (

@@ -4,7 +4,7 @@ import { MongoMemoryServer } from "mongodb-memory-server";
 let mongoServer: MongoMemoryServer;
 
 const dbConnect = async () => {
-  if (process.env.NODE_ENV === 'test') {
+  if (process.env.NODE_ENV === "test") {
     if (!mongoServer) {
       mongoServer = await MongoMemoryServer.create();
       const mongoUri = mongoServer.getUri();

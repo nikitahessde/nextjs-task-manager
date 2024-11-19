@@ -4,14 +4,11 @@ import { NextRequest } from "next/server";
 import Task from "../../../../models/Task";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { UserRole } from "@/models/User";
+import { isAdmin, isManager } from "@/utils/auth";
 
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
-  if (
-    !session ||
-    !(session.user.roles.includes(UserRole.Admin) || session.user.roles.includes(UserRole.Manager))
-  ) {
+  if (!session || !(isAdmin(session) || isManager(session))) {
     return NextResponse.json({ message: "Permission denied" }, { status: 403 });
   }
   await dbConnect();
@@ -29,7 +26,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
-  if (!session || !session.user.roles.includes(UserRole.Admin)) {
+  if (!session || !isAdmin(session)) {
     return NextResponse.json({ message: "Permission denied" }, { status: 403 });
   }
   await dbConnect();

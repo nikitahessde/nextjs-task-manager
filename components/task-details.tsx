@@ -5,9 +5,9 @@ import { useEffect, useState } from "react";
 import ModeEdit from "@mui/icons-material/ModeEdit";
 import Check from "@mui/icons-material/Check";
 import { useSession } from "next-auth/react";
-import { UserRole } from "@/models/User";
 import { useSnackbar } from "@/context/snackbar-context";
 import { useTranslations } from "next-intl";
+import { isAdmin, isManager } from "@/utils/auth";
 
 interface Task {
   uuid: string;
@@ -57,10 +57,7 @@ export const TaskDetails = ({ groups }: { groups: Group[] }) => {
   }, []);
 
   const handleEdit = (task: Task) => {
-    if (
-      !session?.user?.roles.includes(UserRole.Admin) &&
-      !session?.user?.roles.includes(UserRole.Manager)
-    ) {
+    if (!isAdmin(session) && !isManager(session)) {
       showSnackbar(t("permissions"));
       return;
     }
@@ -111,8 +108,7 @@ export const TaskDetails = ({ groups }: { groups: Group[] }) => {
               tasks.map((task) => (
                 <tr key={task.uuid} className="w-full border-b border-gray-200 hover:bg-gray-100">
                   <td className="px-6 py-3 text-left">
-                    {editingTaskId === task.uuid &&
-                    session?.user?.roles.includes(UserRole.Admin) ? (
+                    {editingTaskId === task.uuid && isAdmin(session) ? (
                       <div>
                         <input
                           type="text"
@@ -127,8 +123,7 @@ export const TaskDetails = ({ groups }: { groups: Group[] }) => {
                     )}
                   </td>
                   <td className="px-6 py-3 text-left">
-                    {editingTaskId === task.uuid &&
-                    session?.user?.roles.includes(UserRole.Admin) ? (
+                    {editingTaskId === task.uuid && isAdmin(session) ? (
                       <textarea
                         value={editedTask.description}
                         onChange={(e) =>
@@ -141,8 +136,7 @@ export const TaskDetails = ({ groups }: { groups: Group[] }) => {
                     )}
                   </td>
                   <td className="px-6 py-3 text-left">
-                    {editingTaskId === task.uuid &&
-                    session?.user?.roles.includes(UserRole.Admin) ? (
+                    {editingTaskId === task.uuid && isAdmin(session) ? (
                       <select
                         value={editedTask.status}
                         onChange={(e) => setEditedTask({ ...editedTask, status: e.target.value })}
@@ -162,9 +156,7 @@ export const TaskDetails = ({ groups }: { groups: Group[] }) => {
                   </td>
                   <td className="px-6 py-3 text-left">{new Date(task.createdAt).toDateString()}</td>
                   <td className="px-6 py-3 text-left">
-                    {editingTaskId === task.uuid &&
-                    (session?.user?.roles.includes(UserRole.Admin) ||
-                      session?.user?.roles.includes(UserRole.Manager)) ? (
+                    {editingTaskId === task.uuid && (isAdmin(session) || isManager(session)) ? (
                       <select
                         value={editedTask.assignedTo}
                         onChange={(e) =>

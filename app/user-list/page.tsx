@@ -4,7 +4,7 @@ import User from "@/models/User";
 import Group from "@/models/Group";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { UserRole } from "@/models/User";
+import { isAdmin } from "@/utils/auth";
 
 const UserListPage = async () => {
   await dbConnect();
@@ -14,7 +14,7 @@ const UserListPage = async () => {
   const assignUserToGroup = async (userEmail: string, groupId: string) => {
     "use server";
     const session = await getServerSession(authOptions);
-    if (!session || !session.user.roles.includes(UserRole.Admin)) {
+    if (!session || !isAdmin(session)) {
       console.error("No session found. Assigning not allowed.");
       return;
     }

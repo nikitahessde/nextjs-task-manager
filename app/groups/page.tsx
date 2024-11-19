@@ -1,10 +1,10 @@
 import CreateGroup from "@/components/create-group";
 import dbConnect from "@/utils/mongodb";
 import { authOptions } from "@/lib/auth";
-import { UserRole } from "@/models/User";
 import { getServerSession } from "next-auth";
 import Group from "@/models/Group";
 import GroupDetails from "@/components/group-details";
+import { isAdmin } from "@/utils/auth";
 
 interface Group {
   uuid: string;
@@ -19,7 +19,7 @@ const GroupsPage = async () => {
   const editGroup = async (uuid: string, updates: Partial<{ name: string; users: string[] }>) => {
     "use server";
     const session = await getServerSession(authOptions);
-    if (!session || !session.user.roles.includes(UserRole.Admin)) {
+    if (!session || !isAdmin(session)) {
       console.error("No session found. Editing not allowed.");
       return;
     }
@@ -30,7 +30,7 @@ const GroupsPage = async () => {
   const addGroup = async (group: Group) => {
     "use server";
     const session = await getServerSession(authOptions);
-    if (!session || !session.user.roles.includes(UserRole.Admin)) {
+    if (!session || !isAdmin(session)) {
       console.error("No session found. Editing not allowed.");
       return;
     }
@@ -42,7 +42,7 @@ const GroupsPage = async () => {
   const deleteGroup = async (uuid: string) => {
     "use server";
     const session = await getServerSession(authOptions);
-    if (!session || !session.user.roles.includes(UserRole.Admin)) {
+    if (!session || !isAdmin(session)) {
       console.error("No session found. Deleting not allowed.");
       return;
     }

@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import ModeEdit from "@mui/icons-material/ModeEdit";
 import Check from "@mui/icons-material/Check";
 import { useSession } from "next-auth/react";
-import { UserRole } from "@/models/User";
 import { useSnackbar } from "@/context/snackbar-context";
 import { useTranslations } from "next-intl";
 import { DeleteOutline } from "@mui/icons-material";
@@ -14,6 +13,7 @@ import { useGroups } from "@/redux/selectors";
 import { editGroup as editReduxGroup } from "@/redux/slices/groupsSlice";
 import { deleteGroup as deleteReduxGroup } from "@/redux/slices/groupsSlice";
 import Close from "@mui/icons-material/Close";
+import { isAdmin } from "@/utils/auth";
 
 interface Group {
   uuid: string;
@@ -40,11 +40,13 @@ export const GroupDetails = ({ initialGroups, editGroup, deleteGroup }: GroupDet
   const [nameError, setNameError] = useState("");
 
   useEffect(() => {
-    dispatch(setGroups(initialGroups));
+    if (initialGroups) {
+      dispatch(setGroups(initialGroups));
+    }
   }, [initialGroups, dispatch]);
 
   const handleEdit = (group: Group) => {
-    if (!session?.user?.roles.includes(UserRole.Admin)) {
+    if (!isAdmin(session)) {
       showSnackbar(t("permissions"));
       return;
     }
@@ -98,8 +100,7 @@ export const GroupDetails = ({ initialGroups, editGroup, deleteGroup }: GroupDet
               groups.map((group) => (
                 <tr key={group.uuid} className="w-full border-b border-gray-200 hover:bg-gray-100">
                   <td className="px-6 py-3 text-left">
-                    {editingGroupId === group.uuid &&
-                    session?.user?.roles.includes(UserRole.Admin) ? (
+                    {editingGroupId === group.uuid && isAdmin(session) ? (
                       <div>
                         <input
                           type="text"

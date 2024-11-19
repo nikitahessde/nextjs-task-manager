@@ -11,6 +11,7 @@ import { useTranslations } from "next-intl";
 import { useGroups } from "@/redux/selectors";
 import { setGroups } from "@/redux/slices/groupsSlice";
 import { useDispatch } from "react-redux";
+import { isAdmin } from "@/utils/auth";
 
 interface User {
   email: string;
@@ -67,7 +68,7 @@ export const AddNewTask = ({ initialGroups }: { initialGroups: Group[] }) => {
     assignedTo: string;
     assignedGroup: string;
   }) => {
-    if (!session?.user?.roles.includes(UserRole.Admin)) {
+    if (!isAdmin(session)) {
       showSnackbar(t("permissions"));
       return;
     }
